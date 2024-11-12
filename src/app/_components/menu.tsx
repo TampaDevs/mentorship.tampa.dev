@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
+} from "~/ui/primitives/dropdown-menu";
 
 export default function Menu({ session }: { session: Session | null }) {
   return (

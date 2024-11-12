@@ -21,9 +21,7 @@ export default function RootLayout({
         <TRPCReactProvider>
           <Header />
           <div className="min-h-full">
-            <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-              {children}
-            </main>
+            <main className="mx-auto">{children}</main>
           </div>
         </TRPCReactProvider>
       </body>
