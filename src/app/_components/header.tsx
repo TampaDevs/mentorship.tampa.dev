@@ -1,13 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
+import Menu from "~/app/_components/menu";
+import logo from "~/assets/images/logo.png";
 import { auth } from "~/server/auth";
-import Menu from "./menu";
 
 export default async function Header() {
   const session = await auth();
-
-  // api/auth/signin
-  // api/auth/signout
 
   return (
     <nav className="bg-blue-800 text-white">
@@ -17,7 +15,7 @@ export default async function Header() {
             alt="Tampa Devs"
             width={40}
             height={40}
-            src="/assets/images/logo.webp"
+            src={logo}
             className="h-10 w-10"
           />
           <h1 className="text-xl font-medium">Tampa Devs Mentorship</h1>

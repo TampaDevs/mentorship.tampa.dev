@@ -1,6 +1,6 @@
+import { skillRouter } from "~/server/api/routers/skill";
 import { userRouter } from "~/server/api/routers/user";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { skillRouter } from "./routers/skill";
 
 /**
  * This is the primary router for your server.
