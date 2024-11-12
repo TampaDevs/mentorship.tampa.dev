@@ -1,4 +1,5 @@
 import { seedAccounts } from './seeds/accounts';
+import { seedConversations } from './seeds/conversations'; // Import the new seeding function
 import { seedMentorships } from './seeds/mentorships';
 import { seedMessages } from './seeds/messages';
 import { seedSessions } from './seeds/sessions';
@@ -43,7 +44,11 @@ async function main() {
     currentStep = 'suggestions';
     logStep('Seeding suggestions...', '💡');
     await seedSuggestions();
-    
+
+    currentStep = 'conversations'; 
+    logStep('Seeding conversations...', '💬');
+    await seedConversations();
+
     logStep('Seeding completed.', '✅');
   } catch (error) {
     console.error(`🪦  The ${currentStep} step failed during seeding:`, error);

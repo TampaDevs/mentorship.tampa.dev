@@ -122,6 +122,10 @@ model User {
     suggested_mentor      Suggestion[] @relation("suggested_mentor")
     /// Suggestions where user is the mentee
     suggested_mentee      Suggestion[] @relation("suggested_mentee")
+    /// Conversations where user is participant1
+    participant1_conversations Conversation[] @relation("participant1_conversations")
+    /// Conversations where user is participant2
+    participant2_conversations Conversation[] @relation("participant2_conversations")
 }
 
 /// Verification tokens for passwordless authentication
@@ -155,14 +159,17 @@ model Mentorship {
 /// Communication messages between users
 model Message {
     id            String    @id @default(cuid())
-    mentorshipId  String
+    mentorshipId  String?
+    conversationId String?
     senderId      String
     receiverId    String
     content       String
     sentAt        DateTime  @default(now())
 
     /// Related mentorship record
-    mentorship    Mentorship @relation("mentorship_messages", fields: [mentorshipId], references: [id], onDelete: Cascade)
+    mentorship    Mentorship? @relation("mentorship_messages", fields: [mentorshipId], references: [id], onDelete: Cascade)
+    /// Related conversation record
+    conversation  Conversation? @relation("conversation_messages", fields: [conversationId], references: [id], onDelete: Cascade)
     /// Related sender user record
     sender        User       @relation("sent_messages", fields: [senderId], references: [id], onDelete: Cascade)
     /// Related recipient user record
@@ -180,4 +187,16 @@ model Suggestion {
     mentor      User             @relation("suggested_mentor", fields: [mentorId], references: [id])
     /// Related mentee user record
     mentee      User             @relation("suggested_mentee", fields: [menteeId], references: [id])
+}
+
+model Conversation {
+    id          String    @id @default(cuid())
+    participant1Id String
+    participant2Id String
+    messages    Message[] @relation("conversation_messages")
+
+    /// Related participant1 user record
+    participant1 User     @relation("participant1_conversations", fields: [participant1Id], references: [id])
+    /// Related participant2 user record
+    participant2 User     @relation("participant2_conversations", fields: [participant2Id], references: [id])
 }
