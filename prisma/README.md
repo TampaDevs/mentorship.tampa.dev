@@ -88,6 +88,13 @@ The platform includes comprehensive seed data for development and testing purpos
 startLine: 7
 endLine: 39
 
+### Conversations
+- Generates 20 sample conversations between users.
+- Each conversation includes a series of messages to simulate real interactions.
+- References: ```typescript:prisma/seeds/conversations.ts
+startLine: 1
+endLine: 39
+
 The seeding process follows this order:
 1. Skills (foundation for matching)
 2. Users (core entities)
@@ -96,5 +103,6 @@ The seeding process follows this order:
 5. Mentorships (relationships)
 6. Messages (communication)
 7. Suggestions (matching)
+8. Conversations (user interactions)
 
 This ensures proper relationship handling and referential integrity across all models.

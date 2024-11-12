@@ -7,10 +7,19 @@ import {
 } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
+  /**
+   * Fetches all users from the database.
+   * @returns An array of user objects.
+   */
   getUsers: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.user.findMany();
   }),
 
+  /**
+   * Fetches a user by their unique ID.
+   * @param userId - The unique identifier of the user.
+   * @returns A user object if found, otherwise null.
+   */
   getUserById: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -19,6 +28,11 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
+  /**
+   * Fetches mentorships associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An array of mentorship objects where the user is either a mentor or mentee.
+   */
   getMentorshipsForUser: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -36,6 +50,11 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
+  /**
+   * Fetches skills associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An object containing arrays of mentor and mentee skills.
+   */
   getSkillsForUser: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -52,6 +71,11 @@ export const userRouter = createTRPCRouter({
       };
     }),
 
+  /**
+   * Fetches suggestions associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An array of suggestion objects where the user is either a mentor or mentee.
+   */
   getSuggestionsForUser: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -69,6 +93,16 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
+  /**
+   * Updates a user's profile information.
+   * @param userId - The unique identifier of the user.
+   * @param name - The new name of the user (optional).
+   * @param email - The new email of the user (optional).
+   * @param title - The new title of the user (optional).
+   * @param location - The new location of the user (optional).
+   * @param about - The new about section of the user (optional).
+   * @returns The updated user object.
+   */
   updateUserProfile: protectedProcedure
     .input(z.object({
       userId: z.string(),

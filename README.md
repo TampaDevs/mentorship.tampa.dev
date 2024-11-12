@@ -125,6 +125,7 @@ For any questions or to get involved with Tampa Devs, please visit our website o
 For detailed information on the platform's architecture, data models, and business logic, refer to the internal documentation files:
 - [Product Overview](./PRODUCT.md): Detailed description of the platform's features, user roles, and technical requirements.
 - [Prisma Database Schema](./prisma/README.md): Comprehensive guide to the database schema, models, and relationships.
+- [UI Directory](./src/ui/README.md): Detailed guide to the UI components and design system.
 
 ---
 Ready to start mentoring or being mentored? Sign up today and begin your journey towards personal and professional growth with Tampa Devs!
