@@ -4,10 +4,16 @@ import { MentorshipStatus, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function seedMentorships() {
+  const users = await prisma.user.findMany({
+    select: { id: true },
+  });
+
+  const userIds = users.map(user => user.id);
+
   const mentorships = Array.from({ length: 20 }).map(() => ({
     id: faker.string.uuid(),
-    mentorId: faker.string.uuid(),
-    menteeId: faker.string.uuid(),
+    mentorId: faker.helpers.arrayElement(userIds),
+    menteeId: faker.helpers.arrayElement(userIds),
     startDate: faker.date.past(),
     endDate: faker.helpers.maybe(() => faker.date.future(), { probability: 0.3 }),
     status: faker.helpers.enumValue(MentorshipStatus),

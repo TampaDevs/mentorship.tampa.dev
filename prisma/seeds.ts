@@ -6,35 +6,52 @@ import { seedSkills } from './seeds/skills';
 import { seedSuggestions } from './seeds/suggestions';
 import { seedUsers } from './seeds/users';
 
-async function main() {
-  console.log('🌱 Starting seeding...');
-  
-  console.log('Seeding skills...');
-  await seedSkills();
-  
-  console.log('Seeding users...');
-  await seedUsers();
-  
-  console.log('Seeding accounts...');
-  await seedAccounts();
-  
-  console.log('Seeding sessions...');
-  await seedSessions();
-  
-  console.log('Seeding mentorships...');
-  await seedMentorships();
-  
-  console.log('Seeding messages...');
-  await seedMessages();
-  
-  console.log('Seeding suggestions...');
-  await seedSuggestions();
-  
-  console.log('✅ Seeding completed.');
+function logStep(message: string, emoji: string) {
+  console.log(`\n${emoji}  ${message}\n`);
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Error during seeding:', e);
+async function main() {
+  let currentStep = '';
+
+  try {
+    logStep('Starting seeding...', '🌱');
+    
+    currentStep = 'skills';
+    logStep('Seeding skills...', '🌟');
+    await seedSkills();
+    
+    currentStep = 'users';
+    logStep('Seeding users...', '👥');
+    await seedUsers();
+    
+    currentStep = 'accounts';
+    logStep('Seeding accounts...', '💼');
+    await seedAccounts();
+    
+    currentStep = 'sessions';
+    logStep('Seeding sessions...', '🕒');
+    await seedSessions();
+    
+    currentStep = 'mentorships';
+    logStep('Seeding mentorships...', '🤝');
+    await seedMentorships();
+    
+    currentStep = 'messages';
+    logStep('Seeding messages...', '📬');
+    await seedMessages();
+    
+    currentStep = 'suggestions';
+    logStep('Seeding suggestions...', '💡');
+    await seedSuggestions();
+    
+    logStep('Seeding completed.', '✅');
+  } catch (error) {
+    console.error(`🪦  The ${currentStep} step failed during seeding:`, error);
     process.exit(1);
-  });
+  }
+}
+
+main().catch((error) => {
+  console.error('❌  Seeding failed:', error);
+  process.exit(1);
+});
