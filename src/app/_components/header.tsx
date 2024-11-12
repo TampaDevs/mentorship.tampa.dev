@@ -4,7 +4,7 @@ import Menu from "~/app/_components/menu";
 import logo from "~/assets/images/logo.png";
 import { auth } from "~/server/auth";
 
-export default async function Header() {
+export async function Header() {
   const session = await auth();
 
   return (
