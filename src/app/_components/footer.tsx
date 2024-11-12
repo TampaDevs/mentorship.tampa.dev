@@ -1,21 +1,21 @@
-import { Facebook, Github, Instagram, Twitter, Youtube } from "lucide-react";
-import Link from "next/link";
+import { Facebook, Github, Instagram, Twitter, Youtube } from 'lucide-react';
+import Link from 'next/link';
 
 const navigation = {
   main: [
-    { name: "About", href: "#" },
-    { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Accessibility", href: "#" },
-    { name: "Partners", href: "#" },
+    { name: 'About', href: '#' },
+    { name: 'Blog', href: '#' },
+    { name: 'Jobs', href: '#' },
+    { name: 'Press', href: '#' },
+    { name: 'Accessibility', href: '#' },
+    { name: 'Partners', href: '#' },
   ],
   social: [
-    { name: "Facebook", href: "#", icon: Facebook },
-    { name: "Instagram", href: "#", icon: Instagram },
-    { name: "X", href: "#", icon: Twitter },
-    { name: "GitHub", href: "#", icon: Github },
-    { name: "YouTube", href: "#", icon: Youtube },
+    { name: 'Facebook', href: '#', icon: Facebook },
+    { name: 'Instagram', href: '#', icon: Instagram },
+    { name: 'X', href: '#', icon: Twitter },
+    { name: 'GitHub', href: '#', icon: Github },
+    { name: 'YouTube', href: '#', icon: Youtube },
   ],
 };
 
@@ -23,10 +23,7 @@ export function Footer() {
   return (
     <footer className="bg-background">
       <div className="mx-auto max-w-7xl overflow-hidden px-4 py-10 sm:py-14 lg:px-8">
-        <nav
-          aria-label="Footer"
-          className="-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6"
-        >
+        <nav aria-label="Footer" className="-mb-6 flex flex-wrap justify-center gap-x-12 gap-y-3 text-sm/6">
           {navigation.main.map((item) => (
             <Link
               key={item.name}

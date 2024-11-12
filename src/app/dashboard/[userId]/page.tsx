@@ -1,13 +1,19 @@
+import type { NextPage } from 'next';
+
 interface DashboardHomePageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
-export default function DashboardHomePage({ params }: DashboardHomePageProps) {
+const DashboardHomePage: NextPage<DashboardHomePageProps> = async ({ params }) => {
+  const { userId } = await params;
+
   return (
     <div>
       <h1>Welcome to Your Dashboard</h1>
-      <p>User ID: {params.userId}</p>
+      <p>User ID: {userId}</p>
       {/* ... dashboard content ... */}
     </div>
   );
-}
+};
+
+export default DashboardHomePage;

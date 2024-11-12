@@ -1,16 +1,16 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
 interface OnboardingStartPageProps {
-  params: { onboardingId: string };
+  params: Promise<{ onboardingId: string }>;
 }
 
-const OnboardingStartPage: NextPage<OnboardingStartPageProps> = async ({
-  params,
-}) => {
+const OnboardingStartPage: NextPage<OnboardingStartPageProps> = async ({ params }) => {
+  const { onboardingId } = await params;
+
   return (
     <div>
       <h1>Welcome to Onboarding</h1>
-      <p>Your Onboarding ID: {params.onboardingId}</p>
+      <p>Your Onboarding ID: {onboardingId}</p>
       {/* ... onboarding steps ... */}
     </div>
   );

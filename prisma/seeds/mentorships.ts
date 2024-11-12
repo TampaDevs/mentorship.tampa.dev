@@ -8,7 +8,7 @@ export async function seedMentorships() {
     select: { id: true },
   });
 
-  const userIds = users.map(user => user.id);
+  const userIds = users.map((user) => user.id);
 
   const mentorships = Array.from({ length: 20 }).map(() => ({
     id: faker.string.uuid(),

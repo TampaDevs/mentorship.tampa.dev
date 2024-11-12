@@ -1,16 +1,16 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
 interface NotificationsPageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
-const NotificationsPage: NextPage<NotificationsPageProps> = async ({
-  params,
-}) => {
+const NotificationsPage: NextPage<NotificationsPageProps> = async ({ params }) => {
+  const { userId } = await params;
+
   return (
     <div>
       <h1>Your Notifications</h1>
-      <p>User ID: {params.userId}</p>
+      <p>User ID: {userId}</p>
       {/* ... display notifications ... */}
     </div>
   );

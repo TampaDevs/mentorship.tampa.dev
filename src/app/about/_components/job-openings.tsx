@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "~/ui/primitives/card";
+import Link from 'next/link';
+import { Card, CardContent, CardHeader, CardTitle } from '~/ui/primitives/card';
 
 // Example dynamic content fetching function
 // const jobOpenings = fetchJobOpeningsFromProductMd();
@@ -7,35 +7,35 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/ui/primitives/card";
 const jobOpenings = [
   {
     id: 1,
-    role: "Full-time designer",
-    href: "#",
-    description: "Description from PRODUCT.md",
-    salary: "Salary from PRODUCT.md",
-    location: "Location from PRODUCT.md",
+    role: 'Full-time designer',
+    href: '#',
+    description: 'Description from PRODUCT.md',
+    salary: 'Salary from PRODUCT.md',
+    location: 'Location from PRODUCT.md',
   },
   {
     id: 2,
-    role: "Part-time developer",
-    href: "#",
-    description: "Description from PRODUCT.md",
-    salary: "Salary from PRODUCT.md",
-    location: "Location from PRODUCT.md",
+    role: 'Part-time developer',
+    href: '#',
+    description: 'Description from PRODUCT.md',
+    salary: 'Salary from PRODUCT.md',
+    location: 'Location from PRODUCT.md',
   },
   {
     id: 3,
-    role: "Marketing Specialist",
-    href: "#",
-    description: "Description from PRODUCT.md",
-    salary: "Salary from PRODUCT.md",
-    location: "Location from PRODUCT.md",
+    role: 'Marketing Specialist',
+    href: '#',
+    description: 'Description from PRODUCT.md',
+    salary: 'Salary from PRODUCT.md',
+    location: 'Location from PRODUCT.md',
   },
   {
     id: 4,
-    role: "Product Manager",
-    href: "#",
-    description: "Description from PRODUCT.md",
-    salary: "Salary from PRODUCT.md",
-    location: "Location from PRODUCT.md",
+    role: 'Product Manager',
+    href: '#',
+    description: 'Description from PRODUCT.md',
+    salary: 'Salary from PRODUCT.md',
+    location: 'Location from PRODUCT.md',
   },
 ];
 
@@ -48,14 +48,13 @@ export function JobOpenings() {
             Become a Mentor and Inspire the Next Generation
           </h2>
           <p className="mt-6 text-xl leading-8 text-muted-foreground">
-            Join our community of mentors and help guide aspiring professionals.
-            Share your knowledge, gain new perspectives, and make a lasting
-            impact.
+            Join our community of mentors and help guide aspiring professionals. Share your knowledge, gain new
+            perspectives, and make a lasting impact.
           </p>
           <img
             src="https://images.unsplash.com/photo-1606857521015-7f9fcf423740?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1344&h=1104&q=80"
             alt="Mentorship Program"
-            className="mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
+            className="lg:aspect-auto mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:h-[34.5rem]"
           />
         </div>
         <div className="w-full lg:max-w-xl lg:flex-auto">
@@ -70,16 +69,10 @@ export function JobOpenings() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {opening.description}
-                    </p>
+                    <p className="mt-2 text-sm text-muted-foreground">{opening.description}</p>
                     <div className="mt-4 flex items-center gap-x-4">
-                      <p className="text-sm font-semibold leading-6 text-foreground">
-                        {opening.salary}
-                      </p>
-                      <p className="text-sm leading-6 text-muted-foreground">
-                        {opening.location}
-                      </p>
+                      <p className="text-sm font-semibold leading-6 text-foreground">{opening.salary}</p>
+                      <p className="text-sm leading-6 text-muted-foreground">{opening.location}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -87,12 +80,8 @@ export function JobOpenings() {
             ))}
           </ul>
           <div className="mt-8 flex border-t border-border pt-8">
-            <Link
-              href="#"
-              className="text-sm font-semibold leading-6 text-primary hover:text-primary/80"
-            >
-              View all mentorship opportunities{" "}
-              <span aria-hidden="true">&rarr;</span>
+            <Link href="#" className="text-sm font-semibold leading-6 text-primary hover:text-primary/80">
+              View all mentorship opportunities <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </div>

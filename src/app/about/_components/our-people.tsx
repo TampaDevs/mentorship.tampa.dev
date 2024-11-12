@@ -4,19 +4,15 @@ export function OurPeople() {
       <div className="mx-auto max-w-7xl px-6 lg:flex lg:px-8">
         <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:min-w-full lg:max-w-none lg:flex-none lg:gap-y-8">
           <div className="lg:col-end-1 lg:w-full lg:max-w-lg lg:pb-8">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-              Mentorship Program
-            </h2>
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Mentorship Program</h2>
             <p className="mt-6 text-xl leading-8 text-muted-foreground">
-              Our mentorship application connects members of the tech community
-              for skill-based mentorships, fostering growth and knowledge
-              exchange.
+              Our mentorship application connects members of the tech community for skill-based mentorships, fostering
+              growth and knowledge exchange.
             </p>
             <p className="mt-6 text-base leading-7 text-muted-foreground">
-              The platform supports various forms of mentorship, including
-              junior-to-senior, senior-to-junior, and senior-to-senior, across
-              multiple tech domains such as Frontend Dev, Backend Dev, DevOps,
-              Security, AI/ML, Databases, and Data Science.
+              The platform supports various forms of mentorship, including junior-to-senior, senior-to-junior, and
+              senior-to-senior, across multiple tech domains such as Frontend Dev, Backend Dev, DevOps, Security, AI/ML,
+              Databases, and Data Science.
             </p>
           </div>
           <div className="flex flex-wrap items-start justify-end gap-6 sm:gap-8 lg:contents">

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { MenuIcon } from "lucide-react";
-import type { Session } from "next-auth";
-import Link from "next/link";
+import { MenuIcon } from 'lucide-react';
+import type { Session } from 'next-auth';
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "~/ui/primitives/dropdown-menu";
+} from '~/ui/primitives/dropdown-menu';
 
 export default function Menu({ session }: { session: Session | null }) {
   return (
@@ -21,9 +21,7 @@ export default function Menu({ session }: { session: Session | null }) {
       <DropdownMenuContent className="w-[250px]" align="end">
         {session && (
           <>
-            <DropdownMenuLabel className="pb-0 text-lg">
-              {session.user.name ?? session.user.email}
-            </DropdownMenuLabel>
+            <DropdownMenuLabel className="pb-0 text-lg">{session.user.name ?? session.user.email}</DropdownMenuLabel>
             <DropdownMenuLabel asChild className="pt-0 text-blue-500">
               <Link href="/account">My Account</Link>
             </DropdownMenuLabel>

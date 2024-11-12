@@ -1,14 +1,16 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
 interface SuggestionsPageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
 const SuggestionsPage: NextPage<SuggestionsPageProps> = async ({ params }) => {
+  const { userId } = await params;
+
   return (
     <div>
       <h1>Mentorship Suggestions</h1>
-      <p>User ID: {params.userId}</p>
+      <p>User ID: {userId}</p>
       {/* ... list suggestions for the user ... */}
     </div>
   );

@@ -1,16 +1,16 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
 interface DashboardProfilePageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
-const DashboardProfilePage: NextPage<DashboardProfilePageProps> = async ({
-  params,
-}) => {
+const DashboardProfilePage: NextPage<DashboardProfilePageProps> = async ({ params }) => {
+  const { userId } = await params;
+
   return (
     <div>
       <h1>Your Profile Overview</h1>
-      <p>User ID: {params.userId}</p>
+      <p>User ID: {userId}</p>
       {/* ... summary of user's profile ... */}
     </div>
   );

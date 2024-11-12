@@ -16,36 +16,36 @@ async function main() {
 
   try {
     logStep('Starting seeding...', '🌱');
-    
+
     currentStep = 'skills';
     logStep('Seeding skills...', '🌟');
     await seedSkills();
-    
+
     currentStep = 'users';
     logStep('Seeding users...', '👥');
     await seedUsers();
-    
+
     currentStep = 'accounts';
     logStep('Seeding accounts...', '💼');
     await seedAccounts();
-    
+
     currentStep = 'sessions';
     logStep('Seeding sessions...', '🕒');
     await seedSessions();
-    
+
     currentStep = 'mentorships';
     logStep('Seeding mentorships...', '🤝');
     await seedMentorships();
-    
+
     currentStep = 'messages';
     logStep('Seeding messages...', '📬');
     await seedMessages();
-    
+
     currentStep = 'suggestions';
     logStep('Seeding suggestions...', '💡');
     await seedSuggestions();
 
-    currentStep = 'conversations'; 
+    currentStep = 'conversations';
     logStep('Seeding conversations...', '💬');
     await seedConversations();
 

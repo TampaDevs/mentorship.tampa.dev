@@ -8,7 +8,7 @@ export async function seedAccounts() {
     select: { id: true },
   });
 
-  const userIds = users.map(user => user.id);
+  const userIds = users.map((user) => user.id);
 
   const accounts = Array.from({ length: 15 }).map(() => ({
     id: faker.string.uuid(),

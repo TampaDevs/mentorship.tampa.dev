@@ -57,4 +57,3 @@ export const routes = {
     status: (userId: string, mentorshipId: string) => `/mentorship/${userId}/${mentorshipId}/status`,
   },
 };
-

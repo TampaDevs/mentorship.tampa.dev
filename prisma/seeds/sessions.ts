@@ -8,7 +8,7 @@ export async function seedSessions() {
     select: { id: true },
   });
 
-  const userIds = users.map(user => user.id);
+  const userIds = users.map((user) => user.id);
 
   const sessions = Array.from({ length: 10 }).map(() => ({
     id: faker.string.uuid(),

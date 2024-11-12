@@ -1,11 +1,11 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 
 interface MentorshipsPageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
 const MentorshipsPage: NextPage<MentorshipsPageProps> = async ({ params }) => {
-  const { userId } = params;
+  const { userId } = await params;
 
   return (
     <div>

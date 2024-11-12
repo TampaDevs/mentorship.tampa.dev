@@ -1,10 +1,6 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
 export const userRouter = createTRPCRouter({
   /**
@@ -20,78 +16,64 @@ export const userRouter = createTRPCRouter({
    * @param userId - The unique identifier of the user.
    * @returns A user object if found, otherwise null.
    */
-  getUserById: protectedProcedure
-    .input(z.object({ userId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return await ctx.db.user.findUnique({
-        where: { id: input.userId },
-      });
-    }),
+  getUserById: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.user.findUnique({
+      where: { id: input.userId },
+    });
+  }),
 
   /**
    * Fetches mentorships associated with a user.
    * @param userId - The unique identifier of the user.
    * @returns An array of mentorship objects where the user is either a mentor or mentee.
    */
-  getMentorshipsForUser: protectedProcedure
-    .input(z.object({ userId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return await ctx.db.mentorship.findMany({
-        where: {
-          OR: [
-            { mentorId: input.userId },
-            { menteeId: input.userId },
-          ],
-        },
-        include: {
-          mentor: true,
-          mentee: true,
-        },
-      });
-    }),
+  getMentorshipsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.mentorship.findMany({
+      where: {
+        OR: [{ mentorId: input.userId }, { menteeId: input.userId }],
+      },
+      include: {
+        mentor: true,
+        mentee: true,
+      },
+    });
+  }),
 
   /**
    * Fetches skills associated with a user.
    * @param userId - The unique identifier of the user.
    * @returns An object containing arrays of mentor and mentee skills.
    */
-  getSkillsForUser: protectedProcedure
-    .input(z.object({ userId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      const user = await ctx.db.user.findUnique({
-        where: { id: input.userId },
-        include: {
-          mentor_skills: true,
-          mentee_skills: true,
-        },
-      });
-      return {
-        mentorSkills: user?.mentor_skills,
-        menteeSkills: user?.mentee_skills,
-      };
-    }),
+  getSkillsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    const user = await ctx.db.user.findUnique({
+      where: { id: input.userId },
+      include: {
+        mentor_skills: true,
+        mentee_skills: true,
+      },
+    });
+    return {
+      mentorSkills: user?.mentor_skills,
+      menteeSkills: user?.mentee_skills,
+    };
+  }),
 
   /**
    * Fetches suggestions associated with a user.
    * @param userId - The unique identifier of the user.
    * @returns An array of suggestion objects where the user is either a mentor or mentee.
    */
-  getSuggestionsForUser: protectedProcedure
-    .input(z.object({ userId: z.string() }))
-    .query(async ({ ctx, input }) => {
-      return await ctx.db.suggestion.findMany({
-        where: {
-          OR: [
-            { mentorId: input.userId },
-            { menteeId: input.userId },
-          ],
-        },
-        include: {
-          mentor: true,
-          mentee: true,
-        },
-      });
-    }),
+  getSuggestionsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.suggestion.findMany({
+      where: {
+        OR: [{ mentorId: input.userId }, { menteeId: input.userId }],
+      },
+      include: {
+        mentor: true,
+        mentee: true,
+      },
+    });
+  }),
 
   /**
    * Updates a user's profile information.
@@ -104,14 +86,16 @@ export const userRouter = createTRPCRouter({
    * @returns The updated user object.
    */
   updateUserProfile: protectedProcedure
-    .input(z.object({
-      userId: z.string(),
-      name: z.string().optional(),
-      email: z.string().email().optional(),
-      title: z.string().optional(),
-      location: z.string().optional(),
-      about: z.string().optional(),
-    }))
+    .input(
+      z.object({
+        userId: z.string(),
+        name: z.string().optional(),
+        email: z.string().email().optional(),
+        title: z.string().optional(),
+        location: z.string().optional(),
+        about: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
       return await ctx.db.user.update({
         where: { id: input.userId },

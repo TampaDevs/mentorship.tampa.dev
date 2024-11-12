@@ -15,9 +15,8 @@ export function AboutHero() {
               </h1>
               <div className="mt-6 max-w-xl lg:mt-0 xl:col-end-1 xl:row-start-1">
                 <p className="text-lg font-medium text-gray-500 sm:text-xl">
-                  Join us in our mission to guide and inspire future leaders.
-                  Our mentorship program connects experienced professionals with
-                  eager learners.
+                  Join us in our mission to guide and inspire future leaders. Our mentorship program connects
+                  experienced professionals with eager learners.
                 </p>
               </div>
               <img
