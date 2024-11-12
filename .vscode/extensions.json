@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "prisma.prisma",
+    "bradlc.vscode-tailwindcss",
+    "austenc.tailwind-docs",
+    "bourhaouta.tailwindshades",
+    "aaron-bond.better-comments",
+    "streetsidesoftware.code-spell-checker",
+    "dbaeumer.vscode-eslint",
+    "mattpocock.ts-error-translator",
+    "yoavbls.pretty-ts-errors"
+  ]
+}
