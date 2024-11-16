@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import { AppSidebar } from '~/ui/components/app-sidebar';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -6,10 +7,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '~/components/ui/breadcrumb';
-import { Separator } from '~/components/ui/separator';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar';
-import { AppSidebar } from '~/ui/components/app-sidebar';
+} from '~/ui/primitives/breadcrumb';
+import { Separator } from '~/ui/primitives/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '~/ui/primitives/sidebar';
 
 interface DashboardProps {
   children: ReactNode;
