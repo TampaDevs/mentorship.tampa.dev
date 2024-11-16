@@ -8,11 +8,12 @@ Welcome to the Tampa Devs Mentorship Platform! This application is designed to f
    - [User Roles](#user-roles)
    - [Core Features](#core-features)
 3. [Tech Stack](#tech-stack)
-4. [Deployment](#deployment)
-5. [Quickstart and Setup Guide](#quickstart-and-setup-guide)
+4. [Quickstart and Setup Guide](#quickstart-and-setup-guide)
+5. [Deployment](#deployment)
 6. [How to Contribute](#how-to-contribute)
 7. [Learn More](#learn-more)
-8. [License](#license)
+8. [Internal Documentation](#internal-documentation)
+9. [License](#license)
 
 ## About the Platform
 
@@ -47,9 +48,6 @@ By providing features for personalized matching, goal tracking, and streamlined 
 - **Backend**: [tRPC](https://trpc.io) for creating type-safe APIs with TypeScript, integrated with a Node.js server.
 - **Database**: [Prisma](https://prisma.io) with PostgreSQL for user data, with plans for MongoDB if chat functionality is added.
 - **Authentication**: [NextAuth.js](https://next-auth.js.org) for user authentication, supporting Google, GitHub, and email/password.
-
-## Deployment
-The platform can be deployed using scalable cloud solutions, with [Vercel](https://vercel.com) recommended for frontend deployment and [Railway](https://railway.app) or AWS for backend services, supporting easy scaling.
 
 ## Quickstart and Setup Guide
 
@@ -94,6 +92,20 @@ To get started with the Tampa Devs Mentorship Platform, follow these steps:
    pnpm run start
    ```
 
+### Running with Docker (Optional)
+To run the application using Docker, follow these steps:
+
+1. Build the Docker image:
+   ```bash
+   docker build -t tampa-devs-mentorship-platform .
+   ```
+
+2. Run the Docker container:
+   ```bash
+   docker run -p 3000:3000 --env-file .env tampa-devs-mentorship-platform
+   ```
+   The application will be accessible at `http://localhost:3000`.
+
 ### Additional Scripts
 - **Linting**: To check code quality, run:
   ```bash
@@ -108,6 +120,9 @@ To get started with the Tampa Devs Mentorship Platform, follow these steps:
   pnpm run typecheck
   ```
 
+## Deployment
+The platform can be deployed using scalable cloud solutions, with [Vercel](https://vercel.com) recommended for frontend deployment and [Railway](https://railway.app) or AWS for backend services, supporting easy scaling.
+
 ## How to Contribute
 We welcome contributions to the Tampa Devs Mentorship Platform! Please feel free to fork the repository, submit pull requests, and help enhance the mentorship experience for the tech community.
 
@@ -118,6 +133,13 @@ If you'd like to learn more about the technologies used or how to get involved, 
 - [Prisma Documentation](https://prisma.io/docs)
 
 For any questions or to get involved with Tampa Devs, please visit our website or contact us directly through the platform.
+
+## Internal Documentation
+
+For detailed information on the platform's architecture, data models, and business logic, refer to the internal documentation files:
+- [Product Overview](./PRODUCT.md): Detailed description of the platform's features, user roles, and technical requirements.
+- [Prisma Database Schema](./prisma/README.md): Comprehensive guide to the database schema, models, and relationships.
+- [UI Directory](./src/ui/README.md): Detailed guide to the UI components and design system.
 
 ---
 Ready to start mentoring or being mentored? Sign up today and begin your journey towards personal and professional growth with Tampa Devs!

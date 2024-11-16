@@ -1,33 +1,58 @@
+/// Generator configuration for Prisma Client
 generator client {
     provider = "prisma-client-js"
 }
 
+/// Database connection configuration
 datasource db {
     provider = "postgresql"
-    url = env("DATABASE_URL")
+    url      = env("DATABASE_URL")
 }
 
+/// User role enumeration for access control
+enum UserRole {
+    REGULAR  // Regular user with basic platform access
+    ADMIN    // Administrator with elevated privileges for platform management
+    OWNER    // Platform owner with full system access
+}
+
+/// Status tracking for mentorship relationships
+enum MentorshipStatus {
+    PENDING    // Mentorship request awaiting confirmation
+    ACTIVE     // Currently ongoing mentorship
+    COMPLETED  // Successfully finished mentorship program
+    CANCELED   // Prematurely ended mentorship
+}
+
+/// Status for mentorship matching suggestions
+enum SuggestionStatus {
+    PENDING   // New suggestion awaiting response
+    ACCEPTED  // Suggestion approved by both parties
+    DECLINED  // Suggestion rejected by either party
+}
+
+/// Technical skills for mentorship matching
 model Skill {
-    id        Int      @id @default(autoincrement())
+    id        Int    @id @default(autoincrement())
     name      String
     slug      String
-    mentors   User[]   @relation("skills_as_mentor")
-    mentees   User[]   @relation("skills_as_mentee")
+    mentors   User[] @relation("MentorSkills")
+    mentees   User[] @relation("MenteeSkills")
 }
 
-// Necessary for Next auth
+/// OAuth account information for NextAuth.js
 model Account {
     id                       String  @id @default(cuid())
     userId                   String
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
-    access_token             String? // @db.Text
+    refresh_token            String?
+    access_token             String?
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String?
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
@@ -35,35 +60,118 @@ model Account {
     @@unique([provider, providerAccountId])
 }
 
+/// User session management for NextAuth.js
 model Session {
     id           String   @id @default(cuid())
     sessionToken String   @unique
     userId       String
     expires      DateTime
+    /// Related user record
     user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+/// Core user model containing profile and relationship data
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    mentor_skills Skill[]   @relation("skills_as_mentor")
-    mentee_skills Skill[]   @relation("skills_as_mentee")
-    availability  Json?
-    title         String?
-    location      String?
-    in_person     Boolean?
-    about         String?
+    id                    String     @id @default(cuid())
+    name                  String?
+    email                 String?    @unique
+    emailVerified         DateTime?
+    image                 String?
+    title                 String?
+    location              String?
+    in_person             Boolean?
+    about                 String?
+    role                  UserRole   @default(REGULAR)
+    availability          Json?
+    notificationPreferences Json?
+    onboardingCompletedAt DateTime?
+
+    accounts              Account[]
+    sessions              Session[]
+    mentorSkills          Skill[]    @relation("MentorSkills")
+    menteeSkills          Skill[]    @relation("MenteeSkills")
+    mentorMentorships     Mentorship[] @relation("MentorMentorships")
+    menteeMentorships     Mentorship[] @relation("MenteeMentorships")
+    sentMessages          Message[]    @relation("SentMessages")
+    receivedMessages      Message[]    @relation("ReceivedMessages")
+    suggestedMentor       Suggestion[] @relation("SuggestedMentor")
+    suggestedMentee       Suggestion[] @relation("SuggestedMentee")
+    participant1Conversations Conversation[] @relation("Participant1Conversations")
+    participant2Conversations Conversation[] @relation("Participant2Conversations")
 }
 
+/// Verification tokens for passwordless authentication
 model VerificationToken {
     identifier String
     token      String   @unique
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+/// Mentorship relationship tracking
+model Mentorship {
+    id              String           @id @default(cuid())
+    mentorId        String
+    menteeId        String
+    startDate       DateTime
+    endDate         DateTime?
+    status          MentorshipStatus @default(PENDING)
+    goals           Json?
+    notes           String?
+
+    mentor          User             @relation("MentorMentorships", fields: [mentorId], references: [id])
+    mentee          User             @relation("MenteeMentorships", fields: [menteeId], references: [id])
+    messages        Message[]        @relation("MentorshipMessages")
+    meetings        Meeting[]        @relation("MentorshipMeetings")
+}
+
+/// Communication messages between users
+model Message {
+    id            String    @id @default(cuid())
+    mentorshipId  String?
+    conversationId String?
+    senderId      String
+    receiverId    String
+    content       String
+    sentAt        DateTime  @default(now())
+
+    mentorship    Mentorship? @relation("MentorshipMessages", fields: [mentorshipId], references: [id], onDelete: Cascade)
+    conversation  Conversation? @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
+    sender        User       @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+    receiver      User       @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+/// Mentorship matching suggestions
+model Suggestion {
+    id          String           @id @default(cuid())
+    mentorId    String
+    menteeId    String
+    status      SuggestionStatus @default(PENDING)
+
+    mentor      User             @relation("SuggestedMentor", fields: [mentorId], references: [id])
+    mentee      User             @relation("SuggestedMentee", fields: [menteeId], references: [id])
+}
+
+/// Conversation model for user interactions
+model Conversation {
+    id              String    @id @default(cuid())
+    participant1Id  String
+    participant2Id  String
+    messages        Message[] @relation("ConversationMessages")
+
+    participant1    User     @relation("Participant1Conversations", fields: [participant1Id], references: [id])
+    participant2    User     @relation("Participant2Conversations", fields: [participant2Id], references: [id])
+}
+
+/// Meeting details for scheduled mentorship sessions
+model Meeting {
+    id              String     @id @default(cuid())
+    mentorshipId    String
+    scheduledAt     DateTime
+    duration        Int        // Duration in minutes
+    location        String?    // Optional location or link for the meeting
+    notes           String?    // Optional notes for the meeting
+
+    mentorship      Mentorship @relation("MentorshipMeetings", fields: [mentorshipId], references: [id], onDelete: Cascade)
 }

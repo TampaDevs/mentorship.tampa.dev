@@ -1,5 +1,8 @@
 {
   "cSpell.words": [
-    "mentee"
-  ]
+    "mentee",
+    "mentees",
+    "Mentorships"
+  ],
+  "prettier.configPath": "./prettier.config.js"
 }

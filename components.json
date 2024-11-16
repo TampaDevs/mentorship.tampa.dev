@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema.json",
-  "style": "default",
+  "style": "new-york",
   "rsc": true,
   "tsx": true,
   "tailwind": {
@@ -11,11 +11,13 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "~/components",
-    "utils": "~/lib/utils",
-    "ui": "~/components/ui",
+    "components": "~/ui/components",
+    "hooks": "~/hooks",
     "lib": "~/lib",
-    "hooks": "~/hooks"
+    "organisms": "~/ui/organisms",
+    "primitives": "~/ui/primitives",
+    "ui": "~/components/ui",
+    "utils": "~/lib/utils"
   },
   "iconLibrary": "lucide"
 }

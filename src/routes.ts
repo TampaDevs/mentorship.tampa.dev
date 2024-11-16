@@ -8,8 +8,6 @@ export const routes = {
   public: {
     landingPage: '/',
     about: '/about',
-    faq: '/faq',
-    contactUs: '/contact',
   },
 
   /**
@@ -30,20 +28,11 @@ export const routes = {
   dashboard: {
     home: (userId: string) => `/dashboard/${userId}`,
     suggestions: (userId: string) => `/dashboard/${userId}/suggestions`,
-    memberships: (userId: string) => `/dashboard/${userId}/mentorships`,
+    schedule: (userId: string) => `/dashboard/${userId}/schedule`,
+    mentorships: (userId: string) => `/dashboard/${userId}/mentorships`,
     notifications: (userId: string) => `/dashboard/${userId}/notifications`,
     profile: (userId: string) => `/dashboard/${userId}/profile`,
-  },
-
-  /**
-   * Profile management routes
-   * @param userId - Unique identifier for the user
-   */
-  profile: {
-    personalDetails: (userId: string) => `/profile/${userId}/personal`,
-    skills: (userId: string) => `/profile/${userId}/skills`,
-    preferences: (userId: string) => `/profile/${userId}/preferences`,
-    notifications: (userId: string) => `/profile/${userId}/notifications`,
+    settings: (userId: string) => `/dashboard/${userId}/settings`,
   },
 
   /**
@@ -68,5 +57,12 @@ export const routes = {
     goals: (userId: string, mentorshipId: string) => `/mentorship/${userId}/${mentorshipId}/goals`,
     status: (userId: string, mentorshipId: string) => `/mentorship/${userId}/${mentorshipId}/status`,
   },
-};
 
+  /**
+   * Admin routes
+   */
+  admin: {
+    users: '/admin/users',
+    settings: '/admin/settings',
+  },
+};
