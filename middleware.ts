@@ -1,27 +1,15 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { api } from '~/trpc/server';
 
-export async function middleware(req: NextRequest) {
-  try {
-    const user = await api.user.getCurrentUser()
-    console.log('user: ', user)
+export function middleware(req: NextRequest) {
+  const token = req.cookies.get('next-auth.session-token');
 
-    if (user) {
-      return NextResponse.redirect(new URL('/dashboard', req.url));
-    } else {
-    
-      return NextResponse.redirect(new URL('/api/auth/signin', req.url));
-    }
-  } catch (error) {
-    console.error('Error in middleware:', error);
-    // Optionally handle errors, e.g., redirect to an error page
+  if (!token) {
+    return NextResponse.redirect(new URL('/', req.url));
   }
-
-  // Allow the request to proceed if no redirection is needed
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/', '/dashboard/:path*', '/profile/:path*', '/onboarding/:path*', '/api/auth/signin', '/api/auth/signout'],
+  matcher: ['/dashboard/:path*', '/profile/:path*', '/onboarding/:path*'],
 };
