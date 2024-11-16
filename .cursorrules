@@ -1,0 +1,182 @@
+# Cursor Rules - Tampa Devs Mentorship Platform
+
+## General Principles
+
+- **Modularity Over Duplication**: Prefer iteration and modularization over code duplication.
+- **Descriptive Naming**: Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
+- **File Structure**: Structure files in the following order:
+  1. Exported component
+  2. Subcomponents
+  3. Helpers
+  4. Static content
+  5. Types
+
+## Project Structure
+
+- **Directory Naming**: Use lowercase with dashes for directories (e.g., `components/auth-wizard`).
+- **Feature-Based Organization**: Organize code by feature or domain rather than by type.
+- **tRPC Placement**: Place tRPC routers and procedures in the `src/server/api` directory.
+- **Prisma Setup**: Keep Prisma models and migrations in the `prisma` directory.
+- **App Router**: Use the Next.js App Router located in the `app` directory for routing.
+- **UI Library Directory**: Place all UI components following atomic design principles in the `src/ui` directory.
+
+## Atomic Design Principles
+
+- **Atomic Structure**: Organize UI components into atoms, molecules, organisms, templates, and pages.
+  - **Atoms**: Basic building blocks (e.g., buttons, inputs).
+  - **Molecules**: Combinations of atoms (e.g., form fields).
+  - **Organisms**: Complex components composed of molecules and atoms (e.g., headers, footers).
+  - **Templates**: Page-level layouts that combine organisms.
+  - **Pages**: Specific instances of templates with real content.
+- **Directory Layout**:
+  - `src/ui/atoms`
+  - `src/ui/molecules`
+  - `src/ui/organisms`
+  - `src/ui/templates`
+  - `src/ui/pages`
+
+## Naming Conventions
+
+- **Components and Hooks**: Use PascalCase (e.g., `UserProfile`, `useAuth`).
+- **Variables and Functions**: Use camelCase (e.g., `userName`, `handleSubmit`).
+- **Constants**: Use UPPER_SNAKE_CASE (e.g., `MAX_RETRY_COUNT`).
+- **Exports**: Favor named exports for components.
+
+## TypeScript Usage
+
+- **Consistent Typing**: Use TypeScript for all code to ensure type safety.
+- **Interfaces Over Types**: Prefer `interface` declarations for object shapes to allow declaration merging.
+- **Avoid Enums**: Use union types or maps instead of `enum`s for simplicity.
+- **Functional Components**: Define React components as functions with explicit return types.
+- **End-to-End Type Safety**: Leverage tRPC and Prisma for type-safe API and database interactions.
+
+## Syntax and Formatting
+
+- **Function Declarations**: Use the `function` keyword for pure functions.
+- **Concise Conditionals**: Avoid unnecessary curly braces in simple conditionals.
+- **Declarative JSX**: Write JSX in a clear and declarative manner, avoiding inline logic.
+- **Linting and Formatting**: Adhere to Prettier and ESLint configurations provided by the t3 stack.
+
+## UI and Styling
+
+- **Component Libraries**: Use **shadcn/ui** and **Radix UI** components for building the interface.
+- **Tailwind CSS**: Utilize Tailwind CSS for utility-first styling; avoid custom CSS when possible.
+- **Responsive Design**: Implement responsive layouts using Tailwind's mobile-first approach.
+- **Class Management**: Use `classnames` or `clsx` libraries for conditional class names.
+
+### shadcn/ui Integration
+
+- **Customizable Components**: Use shadcn/ui components as a base and customize them as needed.
+- **Consistent Styling**: Maintain a consistent look and feel across the application by adhering to shadcn/ui design patterns.
+- **Dark Mode Support**: Implement dark mode using shadcn/ui's theming capabilities.
+
+### Atomic Design with `src/ui` Directory
+
+- **Atomic Components**: Place all UI components in the `src/ui` directory, organized by atomic design levels.
+- **Reusability**: Build components to be reusable and composable across different parts of the application.
+- **Isolation**: Ensure UI components are decoupled from business logic and can be tested independently.
+- **Examples**:
+  - **Atoms**: `src/ui/atoms/Button.tsx`, `src/ui/atoms/Input.tsx`
+  - **Molecules**: `src/ui/molecules/FormField.tsx`
+  - **Organisms**: `src/ui/organisms/Navbar.tsx`
+  - **Templates**: `src/ui/templates/DashboardLayout.tsx`
+  - **Pages**: `src/ui/pages/HomePage.tsx`
+
+## Authentication and Authorization
+
+- **NextAuth.js Integration**: Implement authentication flows using NextAuth.js.
+- **Session Handling**: Access session data using the `useSession` hook in client components or `getServerSession` in server components.
+- **Protected Routes**: Secure pages and API routes by checking authentication status and permissions.
+
+## Data Fetching and State Management
+
+- **tRPC Usage**: Use tRPC for type-safe API communication between client and server.
+- **React Query**: Leverage React Query (integrated with tRPC) for data fetching and caching.
+- **Server Components**: Prefer React Server Components for rendering whenever possible.
+- **Local State Management**: Use local component state or React Query; avoid global state unless necessary.
+
+## Database and ORM
+
+- **Prisma ORM**: Use Prisma for database interactions with auto-generated types.
+- **Schema Management**: Define schemas in `prisma/schema.prisma` and keep under version control.
+- **Migrations**: Use Prisma migrations for consistent schema changes across environments.
+- **Data Validation**: Validate data at both the database level with Prisma and at the API level with tRPC.
+
+## Performance Optimization
+
+- **Minimize 'use client'**: Limit the use of `'use client'` to components that require client-side interactivity.
+- **Effects and State**: Minimize `useEffect` and `setState`; prefer server-side data fetching.
+- **Dynamic Imports**: Use `next/dynamic` for non-critical components to reduce initial load times.
+- **Image Optimization**: Use Next.js `Image` component with WebP format and lazy loading.
+- **Caching Strategies**: Implement caching with React Query and proper HTTP headers.
+
+## Key Conventions
+
+- **URL State Management**: Use `nuqs` for managing URL search parameters.
+- **Optimize Web Vitals**: Focus on improving LCP, CLS, and FID metrics.
+- **Limit 'use client' Usage**:
+  - Favor server components and Next.js SSR.
+  - Use only for Web API access in small components.
+  - Avoid for data fetching or state management.
+- **Follow Next.js Docs**: Adhere to Next.js documentation for data fetching, rendering, and routing.
+
+## Routing and Navigation
+
+- **App Router Usage**: Define routes in the `app` directory using the Next.js App Router.
+- **Layout Components**: Use `layout.tsx` files for shared layouts in nested routes.
+- **Dynamic Routes**: Implement dynamic routing with square brackets (e.g., `[id]/page.tsx`).
+- **Client-Side Navigation**: Use Next.js `Link` component for navigation between pages.
+
+## Error Handling
+
+- **tRPC Error Management**: Handle errors in tRPC procedures with proper error codes and messages.
+- **Client-Side Errors**: Use error boundaries to catch and handle errors in React components.
+- **User Feedback**: Provide meaningful error messages and options for users to retry actions.
+
+## Security Best Practices
+
+- **Input Validation**: Always validate and sanitize user inputs on the server side.
+- **Secure Authentication**: Use secure session management and CSRF protection with NextAuth.js.
+- **Environment Variables**: Keep sensitive information in environment variables, not in code.
+- **HTTPS Enforcement**: Serve the application over HTTPS in production environments.
+
+## Testing
+
+- **Testing Framework**: Use **Vitest** as the primary testing framework.
+- **Unit and Integration Tests**:
+  - **React Testing Library**: Utilize React Testing Library for testing React components.
+  - **jest-dom**: Include `@testing-library/jest-dom` for extended DOM assertions.
+- **End-to-End Testing**:
+  - **Playwright**: Use Playwright for E2E testing to simulate real user interactions.
+- **Test Organization**:
+  - Place unit tests alongside the components in `__tests__` directories.
+  - Organize E2E tests in a separate `tests/e2e` directory.
+- **Mocking and Stubbing**:
+  - Use Vitest's mocking capabilities to mock external modules and APIs.
+  - Mock tRPC procedures and Prisma client where necessary.
+- **Continuous Integration**:
+  - Integrate tests into the CI/CD pipeline to automatically run on each commit or pull request.
+  - Use code coverage tools to ensure adequate test coverage.
+- **Best Practices**:
+  - Write tests that are fast, reliable, and deterministic.
+  - Prefer testing user behavior over implementation details.
+  - Use `beforeEach` and `afterEach` hooks to set up and clean up test environments.
+
+## Documentation and Comments
+
+- **Inline Comments**: Use comments to explain complex logic or decisions.
+- **Project Documentation**: Maintain up-to-date README and documentation for setup and usage.
+- **Type Annotations**: Use TypeScript annotations to improve code readability and maintenance.
+
+## Collaboration and Version Control
+
+- **Git Practices**: Use meaningful commit messages and a consistent branching strategy.
+- **Code Reviews**: Conduct peer reviews to maintain code quality.
+- **Pull Requests**: Keep PRs focused and small to facilitate easier reviews.
+
+## Accessibility
+
+- **ARIA Attributes**: Implement ARIA attributes where necessary.
+- **Semantic HTML**: Use semantic HTML elements for proper structure.
+- **Keyboard Navigation**: Ensure all interactive elements are keyboard accessible.
+- **Contrast Ratios**: Use color combinations that meet WCAG guidelines.

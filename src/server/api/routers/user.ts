@@ -1,38 +1,111 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-} from "~/server/api/trpc";
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
 export const userRouter = createTRPCRouter({
+  /**
+   * Fetches all users from the database.
+   * @returns An array of user objects.
+   */
   getUsers: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.user.findMany();
   }),
 
-  create: protectedProcedure
-    .input(z.object({ name: z.string().min(1) }))
+  /**
+   * Fetches a user by their unique ID.
+   * @param userId - The unique identifier of the user.
+   * @returns A user object if found, otherwise null.
+   */
+  getUserById: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.user.findUnique({
+      where: { id: input.userId },
+    });
+  }),
+
+  /**
+   * Fetches mentorships associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An array of mentorship objects where the user is either a mentor or mentee.
+   */
+  getMentorshipsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.mentorship.findMany({
+      where: {
+        OR: [{ mentorId: input.userId }, { menteeId: input.userId }],
+      },
+      include: {
+        mentor: true,
+        mentee: true,
+      },
+    });
+  }),
+
+  /**
+   * Fetches skills associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An object containing arrays of mentor and mentee skills.
+   */
+  getSkillsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    const user = await ctx.db.user.findUnique({
+      where: { id: input.userId },
+      include: {
+        mentor_skills: true,
+        mentee_skills: true,
+      },
+    });
+    return {
+      mentorSkills: user?.mentor_skills,
+      menteeSkills: user?.mentee_skills,
+    };
+  }),
+
+  /**
+   * Fetches suggestions associated with a user.
+   * @param userId - The unique identifier of the user.
+   * @returns An array of suggestion objects where the user is either a mentor or mentee.
+   */
+  getSuggestionsForUser: protectedProcedure.input(z.object({ userId: z.string() })).query(async ({ ctx, input }) => {
+    return await ctx.db.suggestion.findMany({
+      where: {
+        OR: [{ mentorId: input.userId }, { menteeId: input.userId }],
+      },
+      include: {
+        mentor: true,
+        mentee: true,
+      },
+    });
+  }),
+
+  /**
+   * Updates a user's profile information.
+   * @param userId - The unique identifier of the user.
+   * @param name - The new name of the user (optional).
+   * @param email - The new email of the user (optional).
+   * @param title - The new title of the user (optional).
+   * @param location - The new location of the user (optional).
+   * @param about - The new about section of the user (optional).
+   * @returns The updated user object.
+   */
+  updateUserProfile: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        name: z.string().optional(),
+        email: z.string().email().optional(),
+        title: z.string().optional(),
+        location: z.string().optional(),
+        about: z.string().optional(),
+      })
+    )
     .mutation(async ({ ctx, input }) => {
-      return null;
-      // return ctx.db.post.create({
-      //   data: {
-      //     name: input.name,
-      //     createdBy: { connect: { id: ctx.session.user.id } },
-      //   },
-      // });
+      return await ctx.db.user.update({
+        where: { id: input.userId },
+        data: {
+          name: input.name,
+          email: input.email,
+          title: input.title,
+          location: input.location,
+          about: input.about,
+        },
+      });
     }),
-
-  // getLatest: protectedProcedure.query(async ({ ctx }) => {
-  //   const post = await ctx.db.post.findFirst({
-  //     orderBy: { createdAt: "desc" },
-  //     where: { createdBy: { id: ctx.session.user.id } },
-  //   });
-
-  //   return post ?? null;
-  // }),
-
-  // getSecretMessage: protectedProcedure.query(() => {
-  //   return "you can now see this secret message!";
-  // }),
 });
