@@ -1,12 +1,13 @@
 'use client';
 
-import { Bell, House, LogOut, MenuIcon, Search, Settings, UserRound } from 'lucide-react';
+import { Bell, MenuIcon, Search, Settings, UserRound } from 'lucide-react';
 import type { Session } from 'next-auth';
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { Button } from '~/ui/primitives/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -48,11 +49,10 @@ export default function Menu({ session }: { session: Session }) {
         {session && (
           <>
             <DropdownMenuSeparator />
-            <DropdownMenuLabel asChild className="text-red-500">
-              <Link href="api/auth/signout" className="flex items-center gap-2 hover:bg-neutral-100">
-                <LogOut size={15} color="red" />
+            <DropdownMenuLabel asChild>
+              <Button variant="ghost" className="flex w-full justify-start" size="sm" onClick={() => signOut()}>
                 Sign Out
-              </Link>
+              </Button>
             </DropdownMenuLabel>
           </>
         )}

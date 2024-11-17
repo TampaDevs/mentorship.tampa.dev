@@ -21,20 +21,14 @@ enum UserRole {
 }
 
 /// Status tracking for mentorship relationships
-/// @default PENDING - Initial state for new mentorships
 enum MentorshipStatus {
-    /// Mentorship request awaiting confirmation
-    PENDING
-    /// Currently ongoing mentorship
-    ACTIVE
-    /// Successfully finished mentorship program
-    COMPLETED
-    /// Prematurely ended mentorship
-    CANCELED
+    PENDING    // Mentorship request awaiting confirmation
+    ACTIVE     // Currently ongoing mentorship
+    COMPLETED  // Successfully finished mentorship program
+    CANCELED   // Prematurely ended mentorship
 }
 
 /// Status for mentorship matching suggestions
-/// @default PENDING - Initial state for new suggestions
 enum SuggestionStatus {
     /// New suggestion awaiting response
     PENDING
@@ -267,6 +261,7 @@ model Suggestion {
     mentee   User             @relation("SuggestedMentee", fields: [menteeId], references: [id])
 }
 
+/// Conversation model for user interactions
 /// Conversation model for user interactions
 model Conversation {
     id              String       @id @default(cuid())
