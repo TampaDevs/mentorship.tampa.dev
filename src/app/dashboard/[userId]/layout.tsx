@@ -1,10 +1,26 @@
 import { type ReactNode } from 'react';
+import { Dashboard } from '~/app/_components/dashboard';
+import { SidebarProvider } from '~/ui/primitives/sidebar';
 
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+interface DashboardLayoutProps {
+  children: ReactNode;
+  breadcrumbs?: {
+    label: string;
+    href?: string;
+  }[];
+  currentPage?: string;
+}
+
+export default function DashboardLayout({
+  children,
+  breadcrumbs = [],
+  currentPage = 'Dashboard',
+}: DashboardLayoutProps) {
   return (
-    <div>
-      {/* ... dashboard navigation ... */}
-      {children}
-    </div>
+    <SidebarProvider>
+      <Dashboard breadcrumbs={breadcrumbs} currentPage={currentPage}>
+        {children}
+      </Dashboard>
+    </SidebarProvider>
   );
 }

@@ -10,49 +10,34 @@ datasource db {
 }
 
 /// User role enumeration for access control
-/// @default REGULAR - Standard user access
 enum UserRole {
-    /// Regular user with basic platform access
-    REGULAR
-    /// Administrator with elevated privileges for platform management
-    ADMIN
-    /// Platform owner with full system access
-    OWNER
+    REGULAR  // Regular user with basic platform access
+    ADMIN    // Administrator with elevated privileges for platform management
+    OWNER    // Platform owner with full system access
 }
 
 /// Status tracking for mentorship relationships
-/// @default PENDING - Initial state for new mentorships
 enum MentorshipStatus {
-    /// Mentorship request awaiting confirmation
-    PENDING
-    /// Currently ongoing mentorship
-    ACTIVE
-    /// Successfully finished mentorship program
-    COMPLETED
-    /// Prematurely ended mentorship
-    CANCELED
+    PENDING    // Mentorship request awaiting confirmation
+    ACTIVE     // Currently ongoing mentorship
+    COMPLETED  // Successfully finished mentorship program
+    CANCELED   // Prematurely ended mentorship
 }
 
 /// Status for mentorship matching suggestions
-/// @default PENDING - Initial state for new suggestions
 enum SuggestionStatus {
-    /// New suggestion awaiting response
-    PENDING
-    /// Suggestion approved by both parties
-    ACCEPTED
-    /// Suggestion rejected by either party
-    DECLINED
+    PENDING   // New suggestion awaiting response
+    ACCEPTED  // Suggestion approved by both parties
+    DECLINED  // Suggestion rejected by either party
 }
 
 /// Technical skills for mentorship matching
 model Skill {
-    id        Int      @id @default(autoincrement())
+    id        Int    @id @default(autoincrement())
     name      String
     slug      String
-    /// Users who can mentor others in this skill
-    mentors   User[]   @relation("skills_as_mentor")
-    /// Users seeking mentorship in this skill
-    mentees   User[]   @relation("skills_as_mentee")
+    mentors   User[] @relation("MentorSkills")
+    mentees   User[] @relation("MenteeSkills")
 }
 
 /// OAuth account information for NextAuth.js
@@ -63,14 +48,13 @@ model Account {
     provider                 String
     providerAccountId        String
     refresh_token            String?
-    access_token            String?
-    expires_at              Int?
-    token_type              String?
-    scope                   String?
-    id_token                String?
-    session_state           String?
-    /// Related user record
-    user                    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    access_token             String?
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String?
+    session_state            String?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
 
     @@unique([provider, providerAccountId])
@@ -102,30 +86,18 @@ model User {
     notificationPreferences Json?
     onboardingCompletedAt DateTime?
 
-    /// Connected OAuth accounts
     accounts              Account[]
-    /// Active sessions
     sessions              Session[]
-    /// Skills user can mentor others in
-    mentor_skills         Skill[]    @relation("skills_as_mentor")
-    /// Skills user wants to learn
-    mentee_skills         Skill[]    @relation("skills_as_mentee")
-    /// Mentorships where user is the mentor
-    mentor_mentorships    Mentorship[] @relation("mentor_mentorships")
-    /// Mentorships where user is the mentee
-    mentee_mentorships    Mentorship[] @relation("mentee_mentorships")
-    /// Messages sent by this user
-    sent_messages         Message[]    @relation("sent_messages")
-    /// Messages received by this user
-    received_messages     Message[]    @relation("received_messages")
-    /// Suggestions where user is the mentor
-    suggested_mentor      Suggestion[] @relation("suggested_mentor")
-    /// Suggestions where user is the mentee
-    suggested_mentee      Suggestion[] @relation("suggested_mentee")
-    /// Conversations where user is participant1
-    participant1_conversations Conversation[] @relation("participant1_conversations")
-    /// Conversations where user is participant2
-    participant2_conversations Conversation[] @relation("participant2_conversations")
+    mentorSkills          Skill[]    @relation("MentorSkills")
+    menteeSkills          Skill[]    @relation("MenteeSkills")
+    mentorMentorships     Mentorship[] @relation("MentorMentorships")
+    menteeMentorships     Mentorship[] @relation("MenteeMentorships")
+    sentMessages          Message[]    @relation("SentMessages")
+    receivedMessages      Message[]    @relation("ReceivedMessages")
+    suggestedMentor       Suggestion[] @relation("SuggestedMentor")
+    suggestedMentee       Suggestion[] @relation("SuggestedMentee")
+    participant1Conversations Conversation[] @relation("Participant1Conversations")
+    participant2Conversations Conversation[] @relation("Participant2Conversations")
 }
 
 /// Verification tokens for passwordless authentication
@@ -148,12 +120,10 @@ model Mentorship {
     goals           Json?
     notes           String?
 
-    /// Related mentor user record
-    mentor          User             @relation("mentor_mentorships", fields: [mentorId], references: [id])
-    /// Related mentee user record
-    mentee          User             @relation("mentee_mentorships", fields: [menteeId], references: [id])
-    /// Messages exchanged during mentorship
-    messages        Message[]        @relation("mentorship_messages")
+    mentor          User             @relation("MentorMentorships", fields: [mentorId], references: [id])
+    mentee          User             @relation("MenteeMentorships", fields: [menteeId], references: [id])
+    messages        Message[]        @relation("MentorshipMessages")
+    meetings        Meeting[]        @relation("MentorshipMeetings")
 }
 
 /// Communication messages between users
@@ -166,14 +136,10 @@ model Message {
     content       String
     sentAt        DateTime  @default(now())
 
-    /// Related mentorship record
-    mentorship    Mentorship? @relation("mentorship_messages", fields: [mentorshipId], references: [id], onDelete: Cascade)
-    /// Related conversation record
-    conversation  Conversation? @relation("conversation_messages", fields: [conversationId], references: [id], onDelete: Cascade)
-    /// Related sender user record
-    sender        User       @relation("sent_messages", fields: [senderId], references: [id], onDelete: Cascade)
-    /// Related recipient user record
-    receiver      User       @relation("received_messages", fields: [receiverId], references: [id], onDelete: Cascade)
+    mentorship    Mentorship? @relation("MentorshipMessages", fields: [mentorshipId], references: [id], onDelete: Cascade)
+    conversation  Conversation? @relation("ConversationMessages", fields: [conversationId], references: [id], onDelete: Cascade)
+    sender        User       @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+    receiver      User       @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
 }
 
 /// Mentorship matching suggestions
@@ -183,20 +149,29 @@ model Suggestion {
     menteeId    String
     status      SuggestionStatus @default(PENDING)
 
-    /// Related mentor user record
-    mentor      User             @relation("suggested_mentor", fields: [mentorId], references: [id])
-    /// Related mentee user record
-    mentee      User             @relation("suggested_mentee", fields: [menteeId], references: [id])
+    mentor      User             @relation("SuggestedMentor", fields: [mentorId], references: [id])
+    mentee      User             @relation("SuggestedMentee", fields: [menteeId], references: [id])
 }
 
+/// Conversation model for user interactions
 model Conversation {
-    id          String    @id @default(cuid())
-    participant1Id String
-    participant2Id String
-    messages    Message[] @relation("conversation_messages")
+    id              String    @id @default(cuid())
+    participant1Id  String
+    participant2Id  String
+    messages        Message[] @relation("ConversationMessages")
 
-    /// Related participant1 user record
-    participant1 User     @relation("participant1_conversations", fields: [participant1Id], references: [id])
-    /// Related participant2 user record
-    participant2 User     @relation("participant2_conversations", fields: [participant2Id], references: [id])
+    participant1    User     @relation("Participant1Conversations", fields: [participant1Id], references: [id])
+    participant2    User     @relation("Participant2Conversations", fields: [participant2Id], references: [id])
+}
+
+/// Meeting details for scheduled mentorship sessions
+model Meeting {
+    id              String     @id @default(cuid())
+    mentorshipId    String
+    scheduledAt     DateTime
+    duration        Int        // Duration in minutes
+    location        String?    // Optional location or link for the meeting
+    notes           String?    // Optional notes for the meeting
+
+    mentorship      Mentorship @relation("MentorshipMeetings", fields: [mentorshipId], references: [id], onDelete: Cascade)
 }
