@@ -1,11 +1,15 @@
+'use client';
+
+import { signIn, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import Menu from '~/app/_components/menu';
 import logo from '~/assets/images/logo.png';
-import { auth } from '~/server/auth';
+import { Button } from '~/ui/primitives/button';
 
-export async function Header() {
-  const session = await auth();
+export function Header() {
+  const { data: session } = useSession();
 
   return (
     <nav className="bg-blue-800 text-white">
@@ -18,10 +22,7 @@ export async function Header() {
         <div className="flex gap-4">
           {!session ? (
             <div className="flex items-center gap-4">
-              <Link href="api/auth/signin">Sign In</Link>
-              <Link href="api/auth/signin" className="rounded bg-blue-600 px-3 py-2">
-                Sign Up
-              </Link>
+              <Button onClick={() => signIn()}>Sign In</Button>
             </div>
           ) : (
             <Menu session={session} />

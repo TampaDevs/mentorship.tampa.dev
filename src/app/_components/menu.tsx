@@ -4,6 +4,8 @@ import { Bell, MenuIcon, Search, Settings, UserRound } from 'lucide-react';
 import type { Session } from 'next-auth';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+
+import { routes } from '~/routes';
 import { Button } from '~/ui/primitives/button';
 import {
   DropdownMenu,
@@ -23,25 +25,37 @@ export default function Menu({ session }: { session: Session }) {
         <DropdownMenuLabel className="pb-0 text-lg">{session.user.name ?? session.user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuLabel asChild>
-          <Link href="/account" className="flex items-center gap-2 hover:bg-neutral-100">
+          <Link
+            href={routes.dashboard.profile(session.user.id)}
+            className="flex items-center gap-2 hover:bg-neutral-100"
+          >
             <UserRound size={15} />
             Account
           </Link>
         </DropdownMenuLabel>
         <DropdownMenuLabel asChild>
-          <Link href="/matching" className="flex items-center gap-2 hover:bg-neutral-100">
+          <Link
+            href={routes.matching.suggestions(session.user.id)}
+            className="flex items-center gap-2 hover:bg-neutral-100"
+          >
             <Search size={15} />
             Matching
           </Link>
         </DropdownMenuLabel>
         <DropdownMenuLabel asChild>
-          <Link href="/notifications" className="flex items-center gap-2 hover:bg-neutral-100">
+          <Link
+            href={routes.dashboard.notifications(session.user.id)}
+            className="flex items-center gap-2 hover:bg-neutral-100"
+          >
             <Bell size={15} />
             Notifications
           </Link>
         </DropdownMenuLabel>
         <DropdownMenuLabel asChild>
-          <Link href="/settings" className="flex items-center gap-2 hover:bg-neutral-100">
+          <Link
+            href={routes.dashboard.settings(session.user.id)}
+            className="flex items-center gap-2 hover:bg-neutral-100"
+          >
             <Settings size={15} />
             Settings
           </Link>
@@ -50,7 +64,12 @@ export default function Menu({ session }: { session: Session }) {
           <>
             <DropdownMenuSeparator />
             <DropdownMenuLabel asChild>
-              <Button variant="ghost" className="flex w-full justify-start" size="sm" onClick={() => signOut()}>
+              <Button
+                variant="ghost"
+                className="flex w-full justify-start"
+                size="sm"
+                onClick={() => signOut({ callbackUrl: 'http://localhost:3000' })}
+              >
                 Sign Out
               </Button>
             </DropdownMenuLabel>
