@@ -1,7 +1,6 @@
 import { BentoFeatures } from '~/app/_components/bento-features';
 import { CallToAction } from '~/app/_components/call-to-action';
 import { Faq } from '~/app/_components/faq';
-import { Footer } from '~/app/_components/footer';
 import { Hero } from '~/app/_components/hero';
 import { api, HydrateClient } from '~/trpc/server';
 import { Card, CardDescription, CardHeader, CardTitle } from '~/ui/primitives/card';
@@ -34,7 +33,6 @@ export default async function Home() {
       </div>
       <Faq />
       <CallToAction />
-      <Footer />
     </HydrateClient>
   );
 }

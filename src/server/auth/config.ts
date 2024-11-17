@@ -31,6 +31,11 @@ declare module 'next-auth' {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  pages: {
+    error: '/api/auth/error', 
+    verifyRequest: '/api/auth/verify-request',
+    newUser: '/onboarding',
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
