@@ -10,7 +10,7 @@ import { TRPCReactProvider } from '~/trpc/react';
 import { api } from '~/trpc/server';
 
 export const metadata: Metadata = {
-  title: 'Tampa Devs Mentorship',
+  title: 'Tampa <Devs></Devs> Mentorship',
   description: 'Tampa Devs Mentorship',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
@@ -35,11 +35,11 @@ export default async function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>
         <TRPCReactProvider>
-          {!user && <Header />}
+          <Header />
           <div className="min-h-full">
             <main className="mx-auto">{children}</main>
           </div>
-          {!user && <Footer />}
+          <Footer />
         </TRPCReactProvider>
       </body>
     </html>
