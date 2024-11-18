@@ -275,7 +275,7 @@ model Conversation {
     participant2    User         @relation("Participant2Conversations", fields: [participant2Id], references: [id])
 }
 
-/// Meeting details for scheduled mentorship sessions
+/// Meeting details for scheduled mentorship sessionss
 model Meeting {
     id           String     @id @default(cuid())
     mentorshipId String
