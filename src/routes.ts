@@ -24,7 +24,7 @@ export const routes = {
    * User dashboard routes
    */
   dashboard: {
-    home: () => `/dashboard/home`,
+    home: () => `/dashboard`,
     suggestions: () => `/dashboard/suggestions`,
     schedule: () => `/dashboard/schedule`,
     mentorships: () => `/dashboard/mentorships`,
