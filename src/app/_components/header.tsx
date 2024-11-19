@@ -1,33 +1,47 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import Menu from '~/app/_components/menu';
+
 import logo from '~/assets/images/logo.png';
-import { auth } from '~/server/auth';
+import { routes } from '~/routes';
+import { api } from '~/trpc/server';
+import { Button } from '~/ui/primitives/button';
 
 export async function Header() {
-  const session = await auth();
+  const user = await api.user.getCurrentUser();
+  const isOnboarded = user?.onboardingCompletedAt !== null;
 
   return (
-    <nav className="bg-blue-800 text-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-5">
+    <header className="bg-blue-800 p-4 text-white">
+      <div className="container mx-auto flex flex-col items-center justify-between sm:flex-row">
+        <Link href="/" className="mb-4 flex items-center space-x-2 text-2xl font-bold sm:mb-0">
           <Image alt="Tampa Devs" width={40} height={40} src={logo} className="h-10 w-10" />
-          <h1 className="text-xl font-medium">Tampa Devs Mentorship</h1>
+          <span>Tampa Devs Mentorship</span>
         </Link>
 
-        <div className="flex gap-4">
-          {!session ? (
-            <div className="flex items-center gap-4">
-              <Link href="api/auth/signin">Sign In</Link>
-              <Link href="api/auth/signin" className="rounded bg-blue-600 px-3 py-2">
-                Sign Up
-              </Link>
-            </div>
-          ) : (
-            <Menu session={session} />
-          )}
-        </div>
+        <nav>
+          <ul className="flex space-x-4">
+            <li>
+              <Button variant="ghost" asChild>
+                <Link href={routes.public.landingPage}>Home</Link>
+              </Button>
+            </li>
+
+            <li>
+              <Button variant="ghost" asChild>
+                <Link href={routes.public.about}>About</Link>
+              </Button>
+            </li>
+
+            <li>
+              <Button variant="ghost" asChild>
+                <Link href={isOnboarded ? routes.dashboard.home() : routes.onboarding.start()}>
+                  {isOnboarded ? 'Dashboard' : 'Onboarding'}
+                </Link>
+              </Button>
+            </li>
+          </ul>
+        </nav>
       </div>
-    </nav>
+    </header>
   );
 }
