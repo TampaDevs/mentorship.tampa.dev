@@ -1,4 +1,3 @@
-import { Footer } from '~/app/_components/footer';
 import { LandingLayout } from '~/app/_components/landing-layout';
 import { AboutHero } from '~/app/about/_components/about-hero';
 import { JobOpenings } from '~/app/about/_components/job-openings';
@@ -16,7 +15,6 @@ export default async function AboutPage() {
       <OurPeople />
       <Stats />
       <JobOpenings />
-      <Footer />
     </LandingLayout>
   );
 }
