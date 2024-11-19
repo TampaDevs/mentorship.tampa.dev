@@ -61,4 +61,12 @@ export const routes = {
     users: '/admin/users',
     settings: '/admin/settings',
   },
+
+  /**
+   * Authentication routes
+   */
+  auth: {
+    signin: () => `/api/auth/signin`,
+    signout: () => `/api/auth/signout`,
+  },
 };

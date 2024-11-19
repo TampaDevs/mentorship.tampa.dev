@@ -9,6 +9,8 @@ import { Button } from '~/ui/primitives/button';
 export async function Header() {
   const user = await api.user.getCurrentUser();
   const isOnboarded = user?.onboardingCompletedAt !== null;
+  const isLoggedIn = user !== null;
+  const userRoutes = isLoggedIn && isOnboarded ? routes.dashboard.home() : routes.onboarding.start();
 
   return (
     <header className="bg-blue-800 p-4 text-white">
@@ -33,11 +35,15 @@ export async function Header() {
             </li>
 
             <li>
-              <Button variant="ghost" asChild>
-                <Link href={isOnboarded ? routes.dashboard.home() : routes.onboarding.start()}>
-                  {isOnboarded ? 'Dashboard' : 'Onboarding'}
-                </Link>
-              </Button>
+              {isLoggedIn ? (
+                <Button variant="ghost" asChild>
+                  <Link href={userRoutes}>{isOnboarded ? 'Dashboard' : 'Onboarding'}</Link>
+                </Button>
+              ) : (
+                <Button variant="ghost" asChild>
+                  <Link href={routes.auth.signin()}>Sign in</Link>
+                </Button>
+              )}
             </li>
           </ul>
         </nav>
