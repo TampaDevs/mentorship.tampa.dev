@@ -1,7 +1,6 @@
 'use client';
 
-import { BadgeCheck, Bell, ChevronsUpDown, CreditCard, LogOut, Sparkles } from 'lucide-react';
-
+import { ChevronsUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '~/ui/primitives/avatar';
 import {
   DropdownMenu,
@@ -14,15 +13,22 @@ import {
 } from '~/ui/primitives/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '~/ui/primitives/sidebar';
 
-export function NavUser({
-  user,
-}: {
+interface MenuItem {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+}
+
+interface NavUserProps {
   user: {
     name: string;
     email: string;
     avatar: string;
   };
-}) {
+  menuItems: MenuItem[];
+}
+
+export function NavUser({ user, menuItems }: NavUserProps) {
   const { isMobile } = useSidebar();
 
   return (
@@ -65,31 +71,13 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
+              {menuItems.map((item, index) => (
+                <DropdownMenuItem key={index} onClick={item.onClick}>
+                  {item.icon}
+                  {item.label}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

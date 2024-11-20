@@ -1,4 +1,4 @@
-import { Footer } from '~/app/_components/footer';
+import { LandingLayout } from '~/app/_components/landing-layout';
 import { AboutHero } from '~/app/about/_components/about-hero';
 import { JobOpenings } from '~/app/about/_components/job-openings';
 import { LogoCloud } from '~/app/about/_components/logo-cloud';
@@ -8,14 +8,13 @@ import { Timeline } from '~/app/about/_components/timeline';
 
 export default async function AboutPage() {
   return (
-    <div className="bg-background">
+    <LandingLayout>
       <AboutHero />
       <Timeline />
       <LogoCloud />
       <OurPeople />
       <Stats />
       <JobOpenings />
-      <Footer />
-    </div>
+    </LandingLayout>
   );
 }
