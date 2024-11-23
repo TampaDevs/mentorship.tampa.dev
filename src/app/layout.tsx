@@ -10,7 +10,7 @@ import { TRPCReactProvider } from '~/trpc/react';
 import { api } from '~/trpc/server';
 
 export const metadata: Metadata = {
-  title: 'Tampa <Devs></Devs> Mentorship',
+  title: 'Tampa Devs Mentorship',
   description: 'Tampa Devs Mentorship',
   icons: [{ rel: 'icon', url: '/favicon.ico' }],
 };
@@ -39,7 +39,7 @@ export default async function RootLayout({
           <div className="min-h-full">
             <main className="mx-auto">{children}</main>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </TRPCReactProvider>
       </body>
     </html>
