@@ -40,8 +40,8 @@ enum SuggestionStatus {
 
 /// Gender enumeration for user profiles
 enum Gender {
-    MAN
-    WOMAN
+    MALE
+    FEMALE
     NONBINARY
     TRANSGENDER
     OTHER
@@ -196,6 +196,17 @@ model User {
     menteeSoftSkills        SoftSkill[]    @relation("MenteeSoftSkills")
     /// Industries that user has experience in
     industries              Industry[]     @relation("UserIndustries")
+    onboarding              Onboarding?    @relation("Onboarding")
+}
+
+model Onboarding{
+    id                      String           @id @default(cuid())
+    userId                  String           @unique
+    user                    User             @relation("Onboarding", fields: [userId], references: [id])
+    generalFormCompleted    Boolean          @default(false)
+    menteeFormCompleted     Boolean          @default(false)
+    mentorFormCompleted     Boolean          @default(false)
+    optionsFormCompleted    Boolean          @default(false)
 }
 
 /// Verification tokens for passwordless authentication

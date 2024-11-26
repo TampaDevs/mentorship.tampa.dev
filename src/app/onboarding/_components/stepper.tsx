@@ -10,8 +10,7 @@ const steps = [
     slug: 'general',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.',
   },
-  { title: 'Interests', slug: 'interests', description: 'Date & Time' },
-  { title: 'Expertise', slug: 'expertise', description: 'Select Rooms' },
+  { title: 'Interests / Expertise', slug: 'programinfo', description: 'Date & Time' },
   { title: 'Preferences', slug: 'preferences', description: 'Your preferences' },
 ];
 

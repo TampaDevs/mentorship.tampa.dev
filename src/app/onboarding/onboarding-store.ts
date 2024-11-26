@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware';
 interface generalForm {
   first: string;
   last: string;
+  gender: 'MALE' | 'FEMALE' | 'NONBINARY' | 'TRANSGENDER' | 'OTHER';
   userType: string[];
   bio: string;
 }

@@ -13,10 +13,32 @@ import { Card, CardDescription, CardHeader, CardTitle } from '~/ui/primitives/ca
 import './page.css';
 import { ArrowRight, CircleCheck } from 'lucide-react';
 import { useOnboardingStore } from '../onboarding-store';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
+import { api } from '~/trpc/react';
+import { useEffect, useState } from 'react';
+import MultiSelect from 'react-select';
 
-const formSchema = z.object({
+export const generalFormSchema = z.object({
   first: z.string().min(2).max(50),
   last: z.string().min(2).max(50),
+  gender: z.union([
+    z.literal('MALE', { message: 'Please choose an option.' }),
+    z.literal('FEMALE'),
+    z.literal('NONBINARY'),
+    z.literal('TRANSGENDER'),
+    z.literal('OTHER'),
+  ]),
+  seniorityLevel: z.string(),
+  industries: z
+    .array(
+      z.object({
+        value: z.number(),
+        label: z.string(),
+      })
+    )
+    .refine((value) => value.some((item) => item), {
+      message: 'You must select at least one industry.',
+    }),
   userType: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: 'You must select at least one item.',
   }),
@@ -24,22 +46,33 @@ const formSchema = z.object({
 });
 
 const OnboardingGeneralPage = () => {
+  const { data: industries } = api.industry.getIndustries.useQuery();
+  const { data: seniorityLevels } = api.seniority.getSeniorityLevels.useQuery();
+  const [loading, setLoading] = useState(true);
   const { updateGeneralForm } = useOnboardingStore();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+
+  useEffect(() => {
+    if (seniorityLevels && industries) setLoading(false);
+  }, [seniorityLevels, industries]);
+
+  const form = useForm<z.infer<typeof generalFormSchema>>({
+    resolver: zodResolver(generalFormSchema),
     defaultValues: {
       first: '',
       last: '',
-      bio: '',
+      industries: [],
       userType: [],
+      bio: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof generalFormSchema>) {
     console.log(values);
     updateGeneralForm(values);
-    window.location.replace('/onboarding/interests');
+    window.location.replace('/onboarding/programinfo');
   }
+
+  if (loading) return 'Loading...';
 
   return (
     <div>
@@ -83,9 +116,95 @@ const OnboardingGeneralPage = () => {
 
           <FormField
             control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="mb-2">
+                  <FormLabel className="text-base">Gender</FormLabel>
+                  <FormDescription>What gender do you identify with?</FormDescription>
+                </div>
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Gender" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="MALE">Male</SelectItem>
+                    <SelectItem value="FEMALE">Female</SelectItem>
+                    <SelectItem value="NONBINARY">Non-binary</SelectItem>
+                    <SelectItem value="TRANSGENDER">Transgender</SelectItem>
+                    <SelectItem value="OTHER">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {seniorityLevels && (
+            <FormField
+              control={form.control}
+              name="seniorityLevel"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <div className="mb-2">
+                    <FormLabel className="text-base">Seniority</FormLabel>
+                    <FormDescription>What is your seniority level?</FormDescription>
+                  </div>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Seniority Level" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {seniorityLevels.map((level, idx) => (
+                        <SelectItem value={level.id.toString()} key={`seniority-${level.id}`}>
+                          {level.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {industries && (
+            <FormField
+              control={form.control}
+              name="industries"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="mb-2">
+                    <FormLabel className="text-base">Industry</FormLabel>
+                    <FormDescription>What industries do you have the most experience in?</FormDescription>
+                  </div>
+                  <FormControl>
+                    <MultiSelect
+                      isMulti
+                      onChange={(e) => {
+                        field.onChange(e);
+                      }}
+                      placeholder="Select Hard Skills"
+                      options={industries.map((industry) => {
+                        return { value: industry.id, label: industry.name };
+                      })}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          <FormField
+            control={form.control}
             name="userType"
             render={() => (
-              <FormItem className="!my-8">
+              <FormItem className="!my-6">
                 <div className="mb-4">
                   <FormLabel className="text-base">How do you want to use this platform?</FormLabel>
                   <FormDescription>You can choose to appear as a mentor, mentee, or both.</FormDescription>

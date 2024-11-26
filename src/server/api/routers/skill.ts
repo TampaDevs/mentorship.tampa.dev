@@ -10,23 +10,6 @@ export const skillRouter = createTRPCRouter({
    * @returns A promise that resolves to an array of skills with their mentors and mentees.
    */
   getSkills: publicProcedure.query(async ({ ctx }) => {
-    return await ctx.db.skill.findMany({
-      include: {
-        mentors: {  
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-        mentees: {
-          select: {
-            id: true,
-            name: true,
-            email: true,
-          },
-        },
-      },
-    });
+    return await ctx.db.skill.findMany();
   }),
 });

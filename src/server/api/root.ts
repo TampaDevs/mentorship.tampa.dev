@@ -1,6 +1,10 @@
 import { skillRouter } from '~/server/api/routers/skill';
 import { userRouter } from '~/server/api/routers/user';
 import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc';
+import { softSkillRouter } from './routers/soft-skill';
+import { goalRouter } from './routers/goal';
+import { industryRouter } from './routers/industry';
+import { seniorityRouter } from './routers/seniority';
 
 /**
  * This is the primary router for your server.
@@ -10,6 +14,10 @@ import { createCallerFactory, createTRPCRouter } from '~/server/api/trpc';
 export const appRouter = createTRPCRouter({
   user: userRouter,
   skill: skillRouter,
+  softSkill: softSkillRouter,
+  goal: goalRouter,
+  industry: industryRouter,
+  seniority: seniorityRouter,
 });
 
 // export type definition of API
