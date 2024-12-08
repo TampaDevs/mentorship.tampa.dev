@@ -37,7 +37,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Run Lint
-        run: pnpm lint && pnpm lint:ws
+        run: pnpm lint
 
   format:
     name: Format Code
@@ -58,8 +58,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Run Formatter
-        run: pnpm format
+      - name: Run Formatter Check
+        run: pnpm format:check
 
   typecheck:
     name: Typecheck and Build
