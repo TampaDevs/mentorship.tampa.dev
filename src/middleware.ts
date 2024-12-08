@@ -19,7 +19,7 @@ export function middleware(req: NextRequest) {
     }
   } else {
     // Redirect to home if not logged in and trying to access protected routes
-    if (['/dashboard', '/profile', '/onboarding'].some(path => url.pathname.startsWith(path))) {
+    if (['/dashboard', '/profile', '/onboarding'].some((path) => url.pathname.startsWith(path))) {
       return NextResponse.redirect(new URL('/', req.url));
     }
   }

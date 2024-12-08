@@ -12,7 +12,7 @@ export const skillRouter = createTRPCRouter({
   getSkills: publicProcedure.query(async ({ ctx }) => {
     return await ctx.db.skill.findMany({
       include: {
-        mentors: {  
+        mentors: {
           select: {
             id: true,
             name: true,
