@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["^@t3-oss/", "^@tanstack/", "^@trpc/"],
+      "groupName": "t3 and trpc packages",
+      "automerge": true
+    }
+  ],
+  "updateInternalDeps": true,
+  "rangeStrategy": "bump",
+  "automerge": true,
+  "npm": {
+    "fileMatch": ["(^|/)package\\.json$", "(^|/)package\\.json\\.hbs$"]
+  }
+}
