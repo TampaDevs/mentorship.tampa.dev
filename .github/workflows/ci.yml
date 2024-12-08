@@ -19,8 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./tooling/github/setup
+      - uses: ./github/workflows/action.yml
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - shell: bash
+        run: pnpm install
 
       - name: Copy env
         shell: bash
@@ -34,8 +40,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./tooling/github/setup
+      - uses: ./github/workflows/action.yml
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - shell: bash
+        run: pnpm install
 
       - name: Format
         run: pnpm format
@@ -45,8 +57,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup
-        uses: ./tooling/github/setup
+      - uses: ./github/workflows/action.yml
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - shell: bash
+        run: pnpm install
 
       - name: Typecheck
         run: pnpm build && pnpm typecheck
