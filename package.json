@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "build": "next build",
     "check": "next lint && tsc --noEmit",
@@ -79,5 +82,5 @@
   "ct3aMetadata": {
     "initVersion": "7.38.1"
   },
-  "packageManager": "pnpm@9.12.3"
+  "packageManager": "pnpm@9.14.4"
 }
