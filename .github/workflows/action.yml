@@ -1,0 +1,16 @@
+name: "Setup and install"
+
+on: [push, pull_request]  # Define when the workflow should run
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "pnpm"
+
+      - shell: bash
+        run: pnpm install
