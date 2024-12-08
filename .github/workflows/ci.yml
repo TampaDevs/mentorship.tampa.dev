@@ -15,56 +15,73 @@ env:
 
 jobs:
   lint:
+    name: Lint Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: ./.github/workflows/action.yml
-      - uses: actions/setup-node@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
-      - shell: bash
+      - name: Install Dependencies
         run: pnpm install
 
-      - name: Copy env
-        shell: bash
+      - name: Copy Environment File
         run: cp .env.example .env
 
-      - name: Lint
+      - name: Run Lint
         run: pnpm lint && pnpm lint:ws
 
   format:
+    name: Format Code
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: ./.github/workflows/action.yml
-      - uses: actions/setup-node@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
-      - shell: bash
+      - name: Install Dependencies
         run: pnpm install
 
-      - name: Format
+      - name: Run Formatter
         run: pnpm format
 
   typecheck:
+    name: Typecheck and Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      - uses: ./.github/workflows/action.yml
-      - uses: actions/setup-node@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version-file: ".nvmrc"
           cache: "pnpm"
 
-      - shell: bash
+      - name: Install Dependencies
         run: pnpm install
 
-      - name: Typecheck
+      - name: Copy Environment File
+        run: cp .env.example .env
+
+      - name: Run Typecheck
         run: pnpm build && pnpm typecheck
