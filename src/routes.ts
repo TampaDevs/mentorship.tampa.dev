@@ -15,6 +15,7 @@ export const routes = {
    */
   onboarding: {
     start: () => `/onboarding/start`,
+    general: () => `/onboarding/general`,
     expertise: () => `/onboarding/expertise`,
     interests: () => `/onboarding/interests`,
     preferences: () => `/onboarding/preferences`,

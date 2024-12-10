@@ -1,9 +1,13 @@
 import { seedAccounts } from './seeds/accounts';
 import { seedConversations } from './seeds/conversations'; // Import the new seeding function
+import { seedGoals } from './seeds/goals';
+import { seedIndustries } from './seeds/industries';
 import { seedMentorships } from './seeds/mentorships';
 import { seedMessages } from './seeds/messages';
+import { seedSeniorityLevels } from './seeds/seniority';
 import { seedSessions } from './seeds/sessions';
 import { seedSkills } from './seeds/skills';
+import { seedSoftSkills } from './seeds/softSkills';
 import { seedSuggestions } from './seeds/suggestions';
 import { seedUsers } from './seeds/users';
 
@@ -20,6 +24,22 @@ async function main() {
     currentStep = 'skills';
     logStep('Seeding skills...', '🌟');
     await seedSkills();
+
+    currentStep = 'softSkills';
+    logStep('Seeding soft skills...', '🌟');
+    await seedSoftSkills();
+
+    currentStep = 'goals';
+    logStep('Seeding goals...', '🌟');
+    await seedGoals();
+
+    currentStep = 'seniority';
+    logStep('Seeding seniority levels...', '🌟');
+    await seedSeniorityLevels();
+
+    currentStep = 'industries';
+    logStep('Seeding industries...', '🌟');
+    await seedIndustries();
 
     currentStep = 'users';
     logStep('Seeding users...', '👥');

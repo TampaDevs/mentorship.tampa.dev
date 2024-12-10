@@ -40,8 +40,8 @@ enum SuggestionStatus {
 
 /// Gender enumeration for user profiles
 enum Gender {
-    MAN
-    WOMAN
+    MALE
+    FEMALE
     NONBINARY
     TRANSGENDER
     OTHER
@@ -64,9 +64,7 @@ model SeniorityLevel {
     name    String
     slug    String
     /// Users who have this seniority level as a mentor
-    mentors User[] @relation("MentorSeniority")
-    /// Users who have this seniority level as a mentee
-    mentees User[] @relation("MenteeSeniority")
+    users User[] @relation("seniority")
 }
 
 /// Goals for mentorship
@@ -141,7 +139,6 @@ model User {
     title                   String?
     location                String?
     in_person               Boolean?
-    about                   String?
     role                    UserRole   @default(USER)
     linkedin_url            String?
     availability            Json?
@@ -160,6 +157,9 @@ model User {
     accounts                Account[]
     /// Active sessions
     sessions                Session[]
+    /// Users seniority level as a mentee
+    seniorityId       Int?
+    seniority         SeniorityLevel? @relation("seniority", fields: [seniorityId], references: [id])
     /// Skills user can mentor others in
     mentorSkills            Skill[]        @relation("MentorSkills")
     /// Skills user wants to learn
@@ -184,18 +184,23 @@ model User {
     mentorGoals             Goal[]         @relation("MentorGoals")
     /// Goals that the user wants mentorship for
     menteeGoals             Goal[]         @relation("MenteeGoals")
-    /// Users seniority level as a mentor
-    mentorSeniorityId       Int?
-    mentorSeniority         SeniorityLevel? @relation("MentorSeniority", fields: [mentorSeniorityId], references: [id])
-    /// Users seniority level as a mentee
-    menteeSeniorityId       Int?
-    menteeSeniority         SeniorityLevel? @relation("MenteeSeniority", fields: [menteeSeniorityId], references: [id])
     /// Soft skills that the user can help mentees with
     mentorSoftSkills        SoftSkill[]    @relation("MentorSoftSkills")
     /// Soft skills that the user wants mentorship for
     menteeSoftSkills        SoftSkill[]    @relation("MenteeSoftSkills")
     /// Industries that user has experience in
     industries              Industry[]     @relation("UserIndustries")
+    onboarding              Onboarding?    @relation("Onboarding")
+}
+
+model Onboarding{
+    id                      String           @id @default(cuid())
+    userId                  String           @unique
+    user                    User             @relation("Onboarding", fields: [userId], references: [id])
+    generalFormCompleted    Boolean          @default(false)
+    menteeFormCompleted     Boolean          @default(false)
+    mentorFormCompleted     Boolean          @default(false)
+    optionsFormCompleted    Boolean          @default(false)
 }
 
 /// Verification tokens for passwordless authentication
