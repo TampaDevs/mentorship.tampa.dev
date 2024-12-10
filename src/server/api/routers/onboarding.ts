@@ -38,9 +38,9 @@ export const onboardingRouter = createTRPCRouter({
           bio: input.bio,
         },
       })
-      .then(() => {
+      .then(async () => {
         // Mark general form submitted withing onboarding table
-        ctx.db.onboarding.upsert({
+        await ctx.db.onboarding.upsert({
           where: { userId: session.user.id },
           update: { generalFormCompleted: true },
           create: {

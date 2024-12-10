@@ -1,22 +1,23 @@
 'use client';
 
-import { Button } from '~/ui/primitives/button';
-import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { ArrowRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { ArrowRight, CircleCheck } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import { Form } from '~/components/ui/form';
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
 import { api } from '~/trpc/react';
 import { Button } from '~/ui/primitives/button';
 import { useOnboardingStore } from '../onboarding-store';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~/components/ui/select';
-import { api } from '~/trpc/react';
 import { useEffect, useState } from 'react';
 import MultiSelect from 'react-select';
 import OnboardingLoading from '../_components/loading';
 import { generalFormSchema } from '../formSchemas';
+import { Input } from '~/ui/primitives/input';
+import { Checkbox } from '~/components/ui/checkbox';
+import { Card, CardDescription, CardHeader, CardTitle } from '~/ui/primitives/card';
+import { cn } from '~/lib/utils';
+import { Textarea } from '~/components/ui/textarea';
 
 const OnboardingGeneralPage = () => {
   const { data: industries } = api.industry.getIndustries.useQuery();

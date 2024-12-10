@@ -128,7 +128,6 @@ export const userRouter = createTRPCRouter({
           email: input.email,
           title: input.title,
           location: input.location,
-          about: input.about,
         },
       });
     }),
