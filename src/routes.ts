@@ -25,7 +25,7 @@ export const routes = {
    * User dashboard routes
    */
   dashboard: {
-    home: () => `/dashboard/home`,
+    home: () => `/dashboard`,
     suggestions: () => `/dashboard/suggestions`,
     schedule: () => `/dashboard/schedule`,
     mentorships: () => `/dashboard/mentorships`,
@@ -61,5 +61,13 @@ export const routes = {
   admin: {
     users: '/admin/users',
     settings: '/admin/settings',
+  },
+
+  /**
+   * Authentication routes
+   */
+  auth: {
+    signin: () => `/api/auth/signin`,
+    signout: () => `/api/auth/signout`,
   },
 };

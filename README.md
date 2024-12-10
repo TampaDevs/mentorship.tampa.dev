@@ -113,7 +113,7 @@ To run the application using Docker, follow these steps:
   ```
 - **Formatting**: To automatically format code, run:
   ```bash
-  pnpm run format:write
+  pnpm run format:fix
   ```
 - **Type Checking**: To verify TypeScript types, run:
   ```bash

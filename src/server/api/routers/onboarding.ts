@@ -7,14 +7,15 @@ import {
 import { createTRPCRouter, protectedProcedure } from '~/server/api/trpc';
 
 /**
- * Router for handling soft-skill-related API requests.
+ * Router for handling onboarding-related API requests.
  */
 export const onboardingRouter = createTRPCRouter({
   submitGeneralForm: protectedProcedure.input(generalFormSchema).mutation(async ({ ctx, input }) => {
     const session = ctx.session;
 
+    // Ensure user is authenticated
     if (!session?.user?.id) {
-      return null;
+      throw new Error('Unauthorized access');
     }
 
     const industries = input.industries.map((industry) => {
@@ -37,13 +38,11 @@ export const onboardingRouter = createTRPCRouter({
           bio: input.bio,
         },
       })
-      .then(async () => {
-        // Mark general form submitted within onboarding table
-        await ctx.db.onboarding.upsert({
+      .then(() => {
+        // Mark general form submitted withing onboarding table
+        ctx.db.onboarding.upsert({
           where: { userId: session.user.id },
-          update: {
-            generalFormCompleted: true,
-          },
+          update: { generalFormCompleted: true },
           create: {
             userId: session.user.id,
             generalFormCompleted: true,

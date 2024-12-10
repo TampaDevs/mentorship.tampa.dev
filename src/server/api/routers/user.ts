@@ -3,20 +3,20 @@ import { z } from 'zod';
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '~/server/api/trpc';
 
 export const userRouter = createTRPCRouter({
-    /**
+  /**
    * Fetches the current user based on the active session.
    * @returns The current user object if authenticated, otherwise null.
    */
-    getCurrentUser: publicProcedure.query(async ({ ctx }) => {
-      const session = ctx.session;
+  getCurrentUser: publicProcedure.query(async ({ ctx }) => {
+    const session = ctx.session;
 
-      if (!session?.user?.id) {
-        return null;
-      }
-      return await ctx.db.user.findUnique({
-        where: { id: session.user.id },
-      });
-    }),
+    if (!session?.user?.id) {
+      return null;
+    }
+    return await ctx.db.user.findUnique({
+      where: { id: session.user.id },
+    });
+  }),
   /**
    * Fetches all users from the database.
    * @returns An array of user objects.

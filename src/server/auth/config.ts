@@ -32,7 +32,7 @@ declare module 'next-auth' {
  */
 export const authConfig = {
   pages: {
-    error: '/api/auth/error', 
+    error: '/api/auth/error',
     verifyRequest: '/api/auth/verify-request',
     newUser: '/onboarding',
   },
