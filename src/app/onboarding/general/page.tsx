@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '~/ui/primitives/button';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
@@ -17,39 +17,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '~
 import { api } from '~/trpc/react';
 import { useEffect, useState } from 'react';
 import MultiSelect from 'react-select';
-
-export const generalFormSchema = z.object({
-  first: z.string().min(2).max(50),
-  last: z.string().min(2).max(50),
-  gender: z.union([
-    z.literal('MALE', { message: 'Please choose an option.' }),
-    z.literal('FEMALE'),
-    z.literal('NONBINARY'),
-    z.literal('TRANSGENDER'),
-    z.literal('OTHER'),
-  ]),
-  seniorityLevel: z.string(),
-  industries: z
-    .array(
-      z.object({
-        value: z.number(),
-        label: z.string(),
-      })
-    )
-    .refine((value) => value.some((item) => item), {
-      message: 'You must select at least one industry.',
-    }),
-  userType: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: 'You must select at least one item.',
-  }),
-  bio: z.string().min(2).max(50),
-});
+import OnboardingLoading from '../_components/loading';
+import { generalFormSchema } from '../formSchemas';
 
 const OnboardingGeneralPage = () => {
   const { data: industries } = api.industry.getIndustries.useQuery();
   const { data: seniorityLevels } = api.seniority.getSeniorityLevels.useQuery();
   const [loading, setLoading] = useState(true);
   const { updateGeneralForm } = useOnboardingStore();
+  const { mutate, error } = api.onboarding.submitGeneralForm.useMutation();
 
   useEffect(() => {
     if (seniorityLevels && industries) setLoading(false);
@@ -60,19 +36,31 @@ const OnboardingGeneralPage = () => {
     defaultValues: {
       first: '',
       last: '',
+      title: '',
       industries: [],
       userType: [],
       bio: '',
     },
   });
 
-  function onSubmit(values: z.infer<typeof generalFormSchema>) {
+  async function onSubmit(values: z.infer<typeof generalFormSchema>) {
+    setLoading(true);
     console.log(values);
     updateGeneralForm(values);
-    window.location.replace('/onboarding/programinfo');
+    mutate(
+      { ...values },
+      {
+        onSuccess: () => {
+          window.location.replace('/onboarding/programinfo');
+        },
+        onError: (error) => {
+          console.log('Error', error);
+        },
+      }
+    );
   }
 
-  if (loading) return 'Loading...';
+  if (loading && !error) return <OnboardingLoading />;
 
   return (
     <div>
@@ -83,17 +71,23 @@ const OnboardingGeneralPage = () => {
         consequat.
       </p>
 
+      {error && (
+        <div className="border-red my-3 rounded border border-red-400 bg-red-200 p-2 text-sm">
+          An error has occured while submitting this form.
+        </div>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="my-5 w-full max-w-lg space-y-4">
           <div className="flex w-full gap-3">
             <FormField
               control={form.control}
-              name="last"
+              name="first"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Last" {...field} />
+                    <Input placeholder="First" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -101,12 +95,12 @@ const OnboardingGeneralPage = () => {
             />
             <FormField
               control={form.control}
-              name="first"
+              name="last"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="First" {...field} />
+                    <Input placeholder="Last" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -116,11 +110,30 @@ const OnboardingGeneralPage = () => {
 
           <FormField
             control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <div className="mb-2">
+                  <FormLabel>Title</FormLabel>
+                  <FormDescription>
+                    For example: include your role, seniority, department and organization.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Input placeholder="Last" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="gender"
             render={({ field }) => (
               <FormItem className="w-full">
                 <div className="mb-2">
-                  <FormLabel className="text-base">Gender</FormLabel>
+                  <FormLabel>Gender</FormLabel>
                   <FormDescription>What gender do you identify with?</FormDescription>
                 </div>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -149,7 +162,7 @@ const OnboardingGeneralPage = () => {
               render={({ field }) => (
                 <FormItem className="w-full">
                   <div className="mb-2">
-                    <FormLabel className="text-base">Seniority</FormLabel>
+                    <FormLabel>Seniority</FormLabel>
                     <FormDescription>What is your seniority level?</FormDescription>
                   </div>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
@@ -159,7 +172,7 @@ const OnboardingGeneralPage = () => {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {seniorityLevels.map((level, idx) => (
+                      {seniorityLevels.map((level) => (
                         <SelectItem value={level.id.toString()} key={`seniority-${level.id}`}>
                           {level.name}
                         </SelectItem>
@@ -179,7 +192,7 @@ const OnboardingGeneralPage = () => {
               render={({ field }) => (
                 <FormItem>
                   <div className="mb-2">
-                    <FormLabel className="text-base">Industry</FormLabel>
+                    <FormLabel>Industry</FormLabel>
                     <FormDescription>What industries do you have the most experience in?</FormDescription>
                   </div>
                   <FormControl>
@@ -188,7 +201,7 @@ const OnboardingGeneralPage = () => {
                       onChange={(e) => {
                         field.onChange(e);
                       }}
-                      placeholder="Select Hard Skills"
+                      placeholder="Select Industry"
                       options={industries.map((industry) => {
                         return { value: industry.id, label: industry.name };
                       })}
@@ -206,7 +219,7 @@ const OnboardingGeneralPage = () => {
             render={() => (
               <FormItem className="!my-6">
                 <div className="mb-4">
-                  <FormLabel className="text-base">How do you want to use this platform?</FormLabel>
+                  <FormLabel>How do you want to use this platform?</FormLabel>
                   <FormDescription>You can choose to appear as a mentor, mentee, or both.</FormDescription>
                 </div>
                 <div className="flex items-stretch gap-5" id="checkboxes">
@@ -304,7 +317,7 @@ const OnboardingGeneralPage = () => {
             render={({ field }) => (
               <FormItem>
                 <div className="mb-2">
-                  <FormLabel className="text-base">Bio</FormLabel>
+                  <FormLabel>Bio</FormLabel>
                   <FormDescription>
                     Your bio is one of the most important pieces of information for matching with colleagues. A good bio
                     means you are 2x more likely to match with the right person.

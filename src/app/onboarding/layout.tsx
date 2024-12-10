@@ -7,14 +7,14 @@ export default async function OnboardingLayout({ children }: { children: React.R
   const session = await auth();
 
   if (!session) {
-    redirect('/login');
+    redirect('/api/auth/signin');
   }
 
   return (
     <HydrateClient>
       <div className="flex h-[calc(100vh-64px)] grow">
         <Stepper />
-        <div className="flex grow flex-col p-10">{children}</div>
+        <div className="flex h-[calc(100vh-64px)] grow flex-col overflow-y-scroll p-10">{children}</div>
       </div>
     </HydrateClient>
   );

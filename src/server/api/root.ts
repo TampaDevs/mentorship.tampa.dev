@@ -5,6 +5,7 @@ import { softSkillRouter } from './routers/soft-skill';
 import { goalRouter } from './routers/goal';
 import { industryRouter } from './routers/industry';
 import { seniorityRouter } from './routers/seniority';
+import { onboardingRouter } from './routers/onboarding';
 
 /**
  * This is the primary router for your server.
@@ -18,6 +19,7 @@ export const appRouter = createTRPCRouter({
   goal: goalRouter,
   industry: industryRouter,
   seniority: seniorityRouter,
+  onboarding: onboardingRouter,
 });
 
 // export type definition of API

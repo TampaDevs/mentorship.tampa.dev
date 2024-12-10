@@ -2,7 +2,6 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '~/components/ui/form';
 import { api } from '~/trpc/react';
 import { Button } from '~/ui/primitives/button';
@@ -10,44 +9,20 @@ import Select from 'react-select';
 import { Textarea } from '~/components/ui/textarea';
 import { ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { menteeFormSchema } from '../formSchemas';
+import type { z } from 'zod';
+import OnboardingLoading from '../_components/loading';
 
-const menteeFormSchema = z.object({
-  // Mentee
-  menteeSkills: z
-    .array(
-      z.object({
-        value: z.number(),
-        label: z.string(),
-      })
-    )
-    .refine((value) => value.some((item) => item), {
-      message: 'You must select at least one hard skill.',
-    }),
-  sideProjects: z.string(),
-  menteeSoftSkills: z
-    .array(
-      z.object({
-        value: z.number(),
-        label: z.string(),
-      })
-    )
-    .refine((value) => value.some((item) => item), {
-      message: 'You must select at least one soft skill.',
-    }),
-  menteeGoals: z
-    .array(
-      z.object({
-        value: z.number(),
-        label: z.string(),
-      })
-    )
-    .refine((value) => value.some((item) => item), {
-      message: 'You must select at least one goal.',
-    }),
-  motivation: z.string(),
-});
+const genderOptions = [
+  { value: 'MALE', label: 'Male' },
+  { value: 'FEMALE', label: 'Female' },
+  { value: 'NONBINARY', label: 'Nonbinary' },
+  { value: 'TRANSGENDER', label: 'Transgender' },
+  { value: 'OTHER', label: 'Other' },
+];
 
 export default function MenteeForm({ setMenteeFormCompleted }: { setMenteeFormCompleted: (value: boolean) => void }) {
+  const { mutate, error } = api.onboarding.submitMenteeForm.useMutation();
   const { data: skills } = api.skill.getSkills.useQuery();
   const { data: softSkills } = api.softSkill.getSoftSkills.useQuery();
   const { data: goals } = api.goal.getGoals.useQuery();
@@ -69,11 +44,19 @@ export default function MenteeForm({ setMenteeFormCompleted }: { setMenteeFormCo
   });
 
   function onMenteeFormSubmit(values: z.infer<typeof menteeFormSchema>) {
-    console.log(values);
+    setLoading(true);
     setMenteeFormCompleted(true);
+    mutate(
+      { ...values },
+      {
+        onError: (error) => {
+          console.log('Error', error);
+        },
+      }
+    );
   }
 
-  if (loading) return 'Loading...';
+  if (loading && !error) return <OnboardingLoading />;
 
   return (
     <div>
@@ -82,8 +65,42 @@ export default function MenteeForm({ setMenteeFormCompleted }: { setMenteeFormCo
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
         magna aliqua.
       </p>
+
+      {error && (
+        <div className="border-red my-3 rounded border border-red-400 bg-red-200 p-2 text-sm">
+          An error has occured while submitting this form.
+        </div>
+      )}
+
       <Form {...menteeForm}>
         <form onSubmit={menteeForm.handleSubmit(onMenteeFormSubmit)} className="my-5 w-full max-w-lg space-y-8">
+          <FormField
+            control={menteeForm.control}
+            name="menteeGender"
+            render={({ field }) => (
+              <FormItem>
+                <div className="mb-2">
+                  <FormLabel className="text-base">Mentor Gender</FormLabel>
+                  <FormDescription>What gender do you want a mentor from?</FormDescription>
+                </div>
+                <FormControl>
+                  <Select
+                    closeMenuOnSelect={false}
+                    isMulti
+                    onChange={(e) => {
+                      field.onChange(e);
+                    }}
+                    placeholder="Select Soft Skills"
+                    options={genderOptions.map((gender) => {
+                      return { value: gender.value, label: gender.label };
+                    })}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {skills && (
             <FormField
               control={menteeForm.control}

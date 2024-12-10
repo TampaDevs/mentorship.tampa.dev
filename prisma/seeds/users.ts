@@ -13,7 +13,6 @@ export async function seedUsers() {
     title: faker.person.jobTitle(),
     location: faker.location.city(),
     in_person: faker.datatype.boolean(),
-    about: faker.lorem.paragraph(),
     role: faker.helpers.enumValue(UserRole),
     availability: {
       weekdays: faker.helpers.multiple(
